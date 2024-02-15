@@ -26,16 +26,22 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('username')
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('username')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('firstname')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('lastname')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phonenumber')
+                    ->tel()
                     ->maxLength(255),
             ]);
     }
@@ -45,15 +51,20 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('username'),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('firstname'),
+                Tables\Columns\TextColumn::make('lastname'),
+                Tables\Columns\TextColumn::make('phonenumber'),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -61,6 +72,8 @@ class CustomerResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
             ]);
     }
     
@@ -80,4 +93,12 @@ class CustomerResource extends Resource
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }    
+    
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 }
