@@ -10,7 +10,6 @@ class Customer extends Model
 {
     use HasApiTokens, HasFactory;
     use SoftDeletes;
-    
-    protected $guarded =[];
-    
+
+    protected $guarded = [];
 }

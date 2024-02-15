@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class userTableSeeder extends Seeder
 {
@@ -17,7 +16,7 @@ class userTableSeeder extends Seeder
             ->create([
                 'name' => 'Admin',
                 'email' => 'Admin@dibimall.com',
-                'password' => "asdasdasd",
+                'password' => 'asdasdasd',
             ]);
     }
 }
