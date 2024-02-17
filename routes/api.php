@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -21,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/items', [ItemController::class, 'index']);
+Route::get('/shops', [ShopController::class, 'index']);
 
