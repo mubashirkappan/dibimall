@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Cart extends Model
 {
     use HasFactory;
+      protected $guarded = [];
+
+    public function getEncryptedIdAttribute()
+    {
+      return encrypt($this->id);
+    }    
+    protected $appends = ['encrypted_id'];
 }
