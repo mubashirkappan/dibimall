@@ -22,15 +22,15 @@ return new class extends Migration
             $table->string('logo_name');
             $table->integer('category_count');
             $table->integer('image_count');
-            $table->unsignedBigInteger('type_id');
             $table->boolean('delivery');
             $table->integer('km');
             $table->boolean('take_away');
             $table->boolean('top_shop');
             $table->integer('active');
+            $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('place_id');
-            $table->foreign('type_id')->references('id')->on('types');
-            $table->foreign('place_id')->references('id')->on('places');
+            $table->foreign('type_id')->references('id')->on('types')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('place_id')->references('id')->on('places')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_types');
+        Schema::dropIfExists('shops');
     }
 };

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('district');
             $table->string('state');
             $table->string('country');
-            $table->boolean('active');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
@@ -26,7 +26,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
+    {     
         Schema::dropIfExists('places');
     }
 };

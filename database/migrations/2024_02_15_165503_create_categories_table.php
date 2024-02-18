@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('image_name');
             $table->boolean('active');
-            $table->foreign('shop_id')->references('id')->on('shops');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
 
             $table->timestamps();
         });

@@ -10,4 +10,10 @@ class Shop extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function getEncryptedIdAttribute()
+    {
+      return encrypt($this->id);
+    }    
+    protected $appends = ['encrypted_id'];
+
 }

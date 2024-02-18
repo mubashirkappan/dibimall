@@ -13,4 +13,10 @@ class Customer extends Authenticatable
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public function getEncryptedIdAttribute()
+    {
+      return encrypt($this->id);
+    }    
+    protected $appends = ['encrypted_id'];
 }
