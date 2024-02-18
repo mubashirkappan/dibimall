@@ -1,16 +1,15 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Auth\Authenticatable as AuthenticableTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
-    use AuthenticableTrait, HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory;
     use SoftDeletes;
 
     protected $guarded = [];
