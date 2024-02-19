@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price');
+            $table->decimal('dibi_price');
             $table->integer('count');
             $table->string('image_name');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('restrict')->onUpdate('cascade');
-            $table->boolean('active');
+            $table->boolean('active')->default(true);
+            $table->boolean('offer')->default(false);
+            $table->decimal('percentage')->nullable();
+            $table->decimal('amount')->nullable();
             $table->timestamps();
         });
     }

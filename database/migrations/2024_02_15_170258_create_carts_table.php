@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('item_id')->references('id')->on('items')->onDelete('restrict')->onUpdate('cascade');
             $table->integer('count');
             $table->decimal('total_price');
-            $table->boolean('purchased');
+            $table->boolean('purchased')->default(false);
 
             $table->timestamps();
         });

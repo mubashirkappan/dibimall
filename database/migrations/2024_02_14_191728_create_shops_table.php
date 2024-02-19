@@ -22,11 +22,11 @@ return new class extends Migration
             $table->string('logo_name');
             $table->integer('category_count');
             $table->integer('image_count');
-            $table->boolean('delivery');
+            $table->boolean('delivery')->default(false);
             $table->integer('km');
-            $table->boolean('take_away');
-            $table->boolean('top_shop');
-            $table->integer('active');
+            $table->boolean('take_away')->default(true);
+            $table->boolean('top_shop')->default(false);
+            $table->integer('active')->default(true);
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('place_id');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('restrict')->onUpdate('cascade');

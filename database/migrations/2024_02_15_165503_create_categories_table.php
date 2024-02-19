@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->string('name');
             $table->string('image_name');
-            $table->boolean('active');
+            $table->boolean('active')->default(true);
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
 
             $table->timestamps();
