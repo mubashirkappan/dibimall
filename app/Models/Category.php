@@ -14,5 +14,9 @@ class Category extends Model
     {
       return encrypt($this->id);
     }    
+    public function Shop()
+    {
+        return $this->hasOne(Shop::class,'id','shop_id');
+    }
     protected $appends = ['encrypted_id'];
 }
