@@ -15,6 +15,14 @@ class Place extends Model
     {
       return encrypt($this->id);
     }    
+    public function Users()
+    {
+        return $this->hasMany(User::class,'id','shop_id');
+    }
+    public function Shops()
+    {
+        return $this->hasMany(Shop::class,'id','shop_id');
+    }
     protected $appends = ['encrypted_id'];
 
 }

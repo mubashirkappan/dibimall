@@ -18,5 +18,9 @@ class Customer extends Authenticatable
     {
       return encrypt($this->id);
     }    
+    public function place()
+    {
+        return $this->hasOne(Place::class,'id','place_id');
+    }
     protected $appends = ['encrypted_id'];
 }

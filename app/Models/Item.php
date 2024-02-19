@@ -14,7 +14,11 @@ class Item extends Model
     public function getEncryptedIdAttribute()
     {
       return encrypt($this->id);
-    }    
+    }   
+    public function category()
+    {
+        return $this->hasOne(category::class,'id','shop_id');
+    } 
     protected $appends = ['encrypted_id'];
 
 }

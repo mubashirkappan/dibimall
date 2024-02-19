@@ -14,5 +14,13 @@ class Cart extends Model
     {
       return encrypt($this->id);
     }    
+    public function Customer()
+    {
+        return $this->hasOne(Customer::class,'id','customer_id');
+    }
+    public function Item()
+    {
+        return $this->hasOne(Item::class,'id','item_id');
+    }
     protected $appends = ['encrypted_id'];
 }
