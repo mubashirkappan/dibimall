@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('apple_access_token')->nullable();
             $table->text('gmail_access_token')->nullable();
             $table->string('password_reset_token')->nullable();
+            $table->smallInteger('user_type')->nullable()->comment("1 for user 2 owner");
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
