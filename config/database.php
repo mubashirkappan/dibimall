@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 $DATABASE_URL=parse_url(env('JAWSDB_URL'));
-dd($DATABASE_URL);
+// dd($DATABASE_URL);
 
 return [
 
@@ -16,7 +16,6 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-
     'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
