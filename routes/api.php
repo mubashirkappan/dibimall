@@ -25,6 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/items', [ItemController::class, 'index']);
-Route::get('/shops', [ShopController::class, 'index']);
+Route::controller(ShopController::class)->prefix('shop/')->group(function () {
+    Route::get('/list', 'index');
+    Route::get('/create', 'create');
+    Route::get('/edit/{encrypted_id}', 'edit');
+    Route::get('/delete/{encrypted_id}', 'delete');
+    Route::get('/update', 'update');
+});
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
