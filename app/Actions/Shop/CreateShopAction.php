@@ -7,9 +7,14 @@ use App\Http\Resources\ShopResource;
 
 class CreateShopAction
 {
-    public function execute($request)
+    public function execute( array $request)
     {
-        $shop = Shop::create([$request]);
+        
+        $request['category_count']=5;
+        $request['active']=1;
+        $request['image_count']=1;
+        $shop = Shop::create($request);
+
         if(!$shop){
             throw new Exception("something went wrong at shop create", 1);
         }

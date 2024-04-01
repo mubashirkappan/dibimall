@@ -10,7 +10,11 @@ class ListShopAction
     public function execute()
     {
         $shops = Shop::all();
-
-        return ShopResource::collection($shops);
+        $data = ShopResource::collection($shops);
+        return [
+            'success' => true,
+            'data' => $data,
+            'message' => 'shops list',
+        ];
     }
 }

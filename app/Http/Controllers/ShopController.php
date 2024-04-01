@@ -8,13 +8,19 @@ use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
 use App\Actions\Shop\UdateShopAction;
 use App\Actions\Shop\CreateShopAction;
+use App\Http\Requests\CreateShopRequest;
 use App\Http\Resources\ShopResource;
 
-class ShopController extends Controller
+class ShopController extends BaseController
 {
     public function index(ListShopAction $action)
     {
-        return $action->execute();
+        $response = $action->execute();
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'],$response['message']);
+        }else{
+            return $this->sendError($response['message']);
+        }
     }
     public function delete(DeleteShopAction $action,$encrypted_id)
     {
@@ -45,11 +51,11 @@ class ShopController extends Controller
     }
     public function create(CreateShopRequest $request,CreateShopAction $action)
     {
-        $response = $action->execute($request);
+        $response = $action->execute($request->validated());
          if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }
     }
-}
+    }

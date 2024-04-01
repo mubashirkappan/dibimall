@@ -29,13 +29,13 @@ class CreateShopRequest extends FormRequest
             'phone' => 'required|string',
             'email' => 'required|string',
             'logo_name' => 'required|string',
-            'delivery' => 'bool',
             'km' => 'integer',
             'take_away' => 'required|string',
             'top_shop' => 'required|string',
             'active' => 'required|string',
             'type_id' => 'required|string',
             'place_id' => 'required|string',
+            'delivery' => 'required|bool',
         ];
     }
 }
