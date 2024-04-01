@@ -33,6 +33,11 @@ class ItemResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('$'),
+                Forms\Components\TextInput::make('dibi_price')
+                    ->required()
+                    ->numeric()
+                    ->prefix('$'),
+                    
                 Forms\Components\TextInput::make('count')
                     ->required()
                     ->numeric(),

@@ -50,9 +50,9 @@ class ShopResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('logo_name')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('logo_name')
+                    ->image()
+                    ->required(),
                 Forms\Components\TextInput::make('category_count')
                     ->required()
                     ->numeric(),
@@ -61,13 +61,16 @@ class ShopResource extends Resource
                 Forms\Components\TextInput::make('km')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('image_count')
+                    ->required()
+                    ->numeric(),
+                    
                 Forms\Components\Toggle::make('take_away')
                     ->required(),
                 Forms\Components\Toggle::make('top_shop')
                     ->required(),
-                Forms\Components\TextInput::make('active')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Toggle::make('active')
+                    ->required(),
             ]);
     }
 
