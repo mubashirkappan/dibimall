@@ -23,6 +23,10 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
+                
+                Forms\Components\TextInput::make('place_id')
+                    ->required()
+                    ->numeric(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
