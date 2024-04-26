@@ -3,9 +3,9 @@
 namespace App\Actions\Customer;
 
 use App\Models\Customer;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Exception;
 
 class CustomerLoginAction
 {
@@ -15,7 +15,7 @@ class CustomerLoginAction
             $method = $request['method'] ?? null;
             $customer = Customer::where('email', $request['email'])->first();
 
-            if (!$method || !in_array($method, ['google', 'apple', 'normal'])) {
+            if (! $method || ! in_array($method, ['google', 'apple', 'normal'])) {
                 throw new Exception('Invalid login method');
             }
 
@@ -40,7 +40,7 @@ class CustomerLoginAction
 
     private function handleGoogleLogin($customer, $request)
     {
-        if (!$customer) {
+        if (! $customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
                 'email' => $request['email'],
@@ -48,7 +48,7 @@ class CustomerLoginAction
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -61,7 +61,7 @@ class CustomerLoginAction
 
     private function handleAppleLogin($customer, $request)
     {
-        if (!$customer) {
+        if (! $customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
                 'email' => $request['email'],
@@ -69,7 +69,7 @@ class CustomerLoginAction
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -82,7 +82,7 @@ class CustomerLoginAction
 
     private function handleNormalLogin($request)
     {
-        if (!Auth::guard('customer')->attempt(['email' => $request['email'], 'password' => $request['password']])) {
+        if (! Auth::guard('customer')->attempt(['email' => $request['email'], 'password' => $request['password']])) {
             throw new Exception('Invalid Credential');
         }
     }
@@ -93,6 +93,7 @@ class CustomerLoginAction
         $success['id'] = $customer->id;
         $success['email'] = $customer->email;
         $success['username'] = $customer->username;
+
         return ['success' => true, 'data' => $success, 'message' => 'User logged in successfully.'];
     }
 }
