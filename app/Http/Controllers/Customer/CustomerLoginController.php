@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Actions\Customer\CustomerLoginAction;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CustomerLoginRequest;
-use App\Actions\Customer\CustomerLoginAction;
 
 class CustomerLoginController extends BaseController
 {
