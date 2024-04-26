@@ -3,15 +3,12 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ShopResource\Pages;
-use App\Filament\Admin\Resources\ShopResource\RelationManagers;
 use App\Models\Shop;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ShopResource extends Resource
 {
@@ -64,7 +61,7 @@ class ShopResource extends Resource
                 Forms\Components\TextInput::make('image_count')
                     ->required()
                     ->numeric(),
-                    
+
                 Forms\Components\Toggle::make('take_away')
                     ->required(),
                 Forms\Components\Toggle::make('top_shop')
