@@ -40,9 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'customer' => [ 
+        'customer' => [
             'driver' => 'session',
-            'provider' => 'customers', 
+            'provider' => 'customers',
         ],
     ],
 
@@ -116,4 +116,3 @@ return [
     'password_timeout' => 10800,
 
 ];
-
