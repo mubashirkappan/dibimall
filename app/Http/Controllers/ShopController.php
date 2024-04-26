@@ -14,8 +14,12 @@ use App\Http\Resources\ShopResource;
 class ShopController extends BaseController
 {
     public function index(ListShopAction $action)
-    {
-        $response = $action->execute();
+
+    {    $city = request('city') ? request('city') : null;
+        $shop = request('shop') ? request('shop') : null;
+        $category = request('category') ? request('category') : null;
+
+        $response= $action->execute($city, $shop, $category);    
         if ($response['success']) {
             return $this->sendSuccess($response['data'],$response['message']);
         }else{

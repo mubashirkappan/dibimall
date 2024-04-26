@@ -11,6 +11,10 @@ class Place extends Model
 
     protected $guarded = [];
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
     public function getEncryptedIdAttribute()
     {
       return encrypt($this->id);
