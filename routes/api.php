@@ -39,4 +39,4 @@ Route::controller(ShopController::class)->prefix('shop/')->group(function () {
 });
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
-Route::post('places-list', [PlaceController::class, 'list']);
+Route::get('places-list', [PlaceController::class, 'list']);

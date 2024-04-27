@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Actions\Place\ListPlaceAction;
 use App\Models\Place;
 
 
@@ -8,10 +9,12 @@ use Illuminate\Http\Request;
 
 class PlaceController extends BaseController
 {
-    public function list(Request $request){
-        $places = Place::when(request('keyword'),function($q){
-            $q->where('name',request('keyword'));
-        })->get();
-        return $this->sendSuccess($places,'places list');
+    public function list(Request $request,ListPlaceAction $action){
+        $response = $action->execute();
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'],$response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
     }
 }
