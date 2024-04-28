@@ -2,21 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function getEncryptedIdAttribute()
     {
-      return encrypt($this->id);
-    }    
+        return encrypt($this->id);
+    }
+
     public function Shop()
     {
-        return $this->hasOne(Shop::class,'id','shop_id');
+        return $this->belongsTo(Shop::class);
     }
+
     protected $appends = ['encrypted_id'];
 }

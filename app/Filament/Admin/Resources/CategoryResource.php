@@ -20,9 +20,9 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('shop_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\BelongsToSelect::make('shop_id')
+                    ->relationship('shop', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

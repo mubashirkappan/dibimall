@@ -7,10 +7,20 @@ use App\Models\Item;
 
 class ListItemAction
 {
-    public function execute()
+    public function execute($request)
     {
-        $items = Item::all();
+        $items = Item::active()->when($request['category_id'], function ($q) use ($request) {
+            $q->where('category_id', $request['category_id']);
+        })->when($request['keyword'], function ($q) use ($request) {
+            $q->where('name', 'like', '%'.$request['keyword'].'%');
+        })->where('shop_id', $request['shop_id'])->get();
 
-        return ItemResource::collection($items);
+        $data = ItemResource::collection($items);
+
+        return [
+            'success' => true,
+            'data' => $data,
+            'message' => 'places list',
+        ];
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
-    public function getUser(){
+    public function getUser()
+    {
         $user = auth()->user();
-        return UserResource::collection($user);
-    } 
+        $data = new UserResource($user);
+
+        return $this->sendSuccess($data, 'user details');
+    }
 }

@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\Customer\CustomerRegisterController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::group(['middleware'=>'auth:sanctum'],function (){
+Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get-user', [UserController::class, 'getUser']);
 });
@@ -27,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/items', [ItemController::class, 'index']);
+Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
 
 Route::controller(ShopController::class)->prefix('shop/')->group(function () {
@@ -39,4 +40,4 @@ Route::controller(ShopController::class)->prefix('shop/')->group(function () {
 });
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
-Route::post('places-list', [PlaceController::class, 'list']);
+Route::get('places-list', [PlaceController::class, 'list']);

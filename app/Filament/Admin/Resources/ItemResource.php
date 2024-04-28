@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ItemResource\Pages;
 use App\Models\Item;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -20,9 +21,14 @@ class ItemResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
+                // Select::make('shop_id')
+                // ->relationship('shop', 'name'),
+                Forms\Components\BelongsToSelect::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required(),
+                Forms\Components\BelongsToSelect::make('shop_id')
+                    ->relationship('shop', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
