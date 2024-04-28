@@ -21,8 +21,8 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\BelongsToSelect::make('shop_id')
-                ->relationship('shop', 'name')
-                ->required(),
+                    ->relationship('shop', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

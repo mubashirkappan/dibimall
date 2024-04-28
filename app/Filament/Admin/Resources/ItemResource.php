@@ -5,11 +5,11 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ItemResource\Pages;
 use App\Models\Item;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Select;
 
 class ItemResource extends Resource
 {
@@ -22,7 +22,7 @@ class ItemResource extends Resource
         return $form
             ->schema([
                 // Select::make('shop_id')
-                    // ->relationship('shop', 'name'),
+                // ->relationship('shop', 'name'),
                 Forms\Components\BelongsToSelect::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),

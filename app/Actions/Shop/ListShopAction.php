@@ -13,7 +13,7 @@ class ListShopAction
 {
     public function execute($city, $shop)
     {
-        
+
         $placeId = Place::active()->when($city, function ($q) use ($city) {
             $q->where('name', $city);
         })->pluck('id');
@@ -24,13 +24,13 @@ class ListShopAction
         })->get();
         // Shop::with('Items')->get()->dd();
 
-        
         // $items = Item::active()->when($categoryId, function ($q) use ($categoryId) {
         //     $q->whereIn('category_id', $categoryId);
         // })->get();
         // dd($shops->Items());
-        
+
         $data = ShopResource::collection($shops);
+
         // $items = ItemResource::collection($items);
         // $data['items']=$items;
         return [

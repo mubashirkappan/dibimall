@@ -9,11 +9,12 @@ class ListPlaceAction
 {
     public function execute()
     {
-        $places = Place::active()->when(request('keyword'),function($q){
-            $q->where('name','like','%'.request('keyword').'%');
+        $places = Place::active()->when(request('keyword'), function ($q) {
+            $q->where('name', 'like', '%'.request('keyword').'%');
         })->get();
 
         $data = PlaceResource::collection($places);
+
         return [
             'success' => true,
             'data' => $data,

@@ -22,9 +22,9 @@ class ListItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'shop_id' =>'required',
-            'category_id' =>'nullable',
-            'keyword' =>'nullable',
+            'shop_id' => 'required',
+            'category_id' => 'nullable',
+            'keyword' => 'nullable',
         ];
     }
 }

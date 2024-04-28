@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +20,7 @@ use App\Http\Controllers\Customer\CustomerRegisterController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::group(['middleware'=>'auth:sanctum'],function (){
+Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get-user', [UserController::class, 'getUser']);
 });
