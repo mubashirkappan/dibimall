@@ -17,9 +17,8 @@ class ShopController extends BaseController
 
     {    $city = request('city') ? request('city') : null;
         $shop = request('shop') ? request('shop') : null;
-        $category = request('category') ? request('category') : null;
 
-        $response= $action->execute($city, $shop, $category);    
+        $response= $action->execute($city, $shop);    
         if ($response['success']) {
             return $this->sendSuccess($response['data'],$response['message']);
         }else{

@@ -11,12 +11,9 @@ use App\Models\Shop;
 
 class ListShopAction
 {
-    public function execute($city, $shop,$category)
+    public function execute($city, $shop)
     {
-        $categoryId =[];
-        if($category){
-            $categoryId = Category::where('name', $category)->pluck('id');
-        }
+        
         $placeId = Place::active()->when($city, function ($q) use ($city) {
             $q->where('name', $city);
         })->pluck('id');
@@ -24,10 +21,6 @@ class ListShopAction
             $q->whereIn('place_id', $placeId);
         })->when($shop, function ($q) use ($shop) {
             $q->where('name', $shop);
-        })->when($categoryId, function ($q) use ($categoryId) {
-            $q->whereHas('Items',function($qu)use ($categoryId){
-                $qu->whereIn('category_id', $categoryId);
-            });
         })->get();
         // Shop::with('Items')->get()->dd();
 

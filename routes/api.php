@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/items', [ItemController::class, 'index']);
+Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
 
 Route::controller(ShopController::class)->prefix('shop/')->group(function () {
