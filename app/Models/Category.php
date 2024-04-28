@@ -16,7 +16,7 @@ class Category extends Model
     }    
     public function Shop()
     {
-        return $this->hasOne(Shop::class,'id','shop_id');
+        return $this->belongsTo(Shop::class);
     }
     protected $appends = ['encrypted_id'];
 }

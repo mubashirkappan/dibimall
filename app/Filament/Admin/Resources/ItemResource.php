@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
 
 class ItemResource extends Resource
 {
@@ -20,9 +21,14 @@ class ItemResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
+                // Select::make('shop_id')
+                    // ->relationship('shop', 'name'),
+                Forms\Components\BelongsToSelect::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required(),
+                Forms\Components\BelongsToSelect::make('shop_id')
+                    ->relationship('shop', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

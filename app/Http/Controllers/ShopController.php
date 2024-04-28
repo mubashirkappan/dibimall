@@ -30,7 +30,7 @@ class ShopController extends BaseController
     {
         $response = $action->execute($encrypted_id);
         if ($response['success']) {
-            return $this->sendSuccess($response['message']);
+            return $this->sendSuccess([],$response['message']);
         } else {
             return $this->sendError($response['message']);
         }

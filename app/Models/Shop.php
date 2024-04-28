@@ -20,15 +20,15 @@ class Shop extends Model
     }    
     public function type()
     {
-        return $this->hasOne(Type::class,'id','type_id');
+        return $this->belongsTo(Type::class);
     }
     public function Place()
     {
-        return $this->hasOne(Place::class,'id','place_id');
+        return $this->belongsTo(Place::class);
     }
-    public function Items()
+    public function items()
     {
-        return $this->hasManyThrough(Item::class,Category::class,);
+        return $this->hasMany(Item::class);
     }
     public function Categories()
     {

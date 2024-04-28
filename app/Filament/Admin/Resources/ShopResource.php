@@ -20,12 +20,12 @@ class ShopResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('type_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('place_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\BelongsToSelect::make('place_id')
+                    ->relationship('place', 'name')
+                    ->required(),
+                Forms\Components\BelongsToSelect::make('type_id')
+                    ->relationship('type', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -50,9 +50,6 @@ class ShopResource extends Resource
                 Forms\Components\FileUpload::make('logo_name')
                     ->image()
                     ->required(),
-                Forms\Components\TextInput::make('category_count')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\Toggle::make('delivery')
                     ->required(),
                 Forms\Components\TextInput::make('km')
