@@ -117,4 +117,9 @@ class CustomerResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function canCreate(): bool
+    {
+       return false;
+    }
 }
