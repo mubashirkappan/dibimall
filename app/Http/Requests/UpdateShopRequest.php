@@ -22,7 +22,7 @@ class UpdateShopRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'=>'required',
+            'id' => 'required',
             'name' => 'required|string',
             'address' => 'required|string',
             'landmark' => 'required|string',

@@ -22,10 +22,9 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-
-                Forms\Components\TextInput::make('place_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\BelongsToSelect::make('place_id')
+                    ->relationship('place', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

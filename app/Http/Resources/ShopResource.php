@@ -26,6 +26,9 @@ class ShopResource extends JsonResource
             'top_shop' => $this->top_shop,
             'active' => $this->active,
             'place_id' => $this->place_id,
+            'place' => $this->place->name,
+            'items' => $this->Items,
+            'categorys' => $this->Categories,
         ];
     }
 }

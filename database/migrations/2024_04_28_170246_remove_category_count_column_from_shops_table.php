@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->string('name')->nullable()->change();
+        Schema::table('shops', function (Blueprint $table) {
+            $table->dropColumn('category_count');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->string('name')->nullable(false)->change();
+        Schema::table('shops', function (Blueprint $table) {
+            $table->integer('category_count');
         });
     }
 };

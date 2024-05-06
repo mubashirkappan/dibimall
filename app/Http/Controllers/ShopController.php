@@ -2,30 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
-use App\Actions\Shop\ListShopAction;
+use App\Actions\Shop\CreateShopAction;
 use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
-use App\Actions\Shop\UdateShopAction;
-use App\Actions\Shop\CreateShopAction;
-use App\Http\Resources\ShopResource;
+use App\Actions\Shop\ListShopAction;
+use App\Http\Requests\CreateShopRequest;
 
-class ShopController extends Controller
+class ShopController extends BaseController
 {
     public function index(ListShopAction $action)
     {
-        return $action->execute();
-    }
-    public function delete(DeleteShopAction $action,$encrypted_id)
-    {
-        $response = $action->execute($encrypted_id);
+        $city = request('city') ? request('city') : null;
+        $shop = request('shop') ? request('shop') : null;
+
+        $response = $action->execute($city, $shop);
         if ($response['success']) {
-            return $this->sendSuccess($response['message']);
+            return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }
     }
-    public function edit(EditShopAction $action,$encrypted_id)
+
+    public function delete(DeleteShopAction $action, $encrypted_id)
+    {
+        $response = $action->execute($encrypted_id);
+        if ($response['success']) {
+            return $this->sendSuccess([], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+
+    public function edit(EditShopAction $action, $encrypted_id)
     {
         $response = $action->execute($encrypted_id);
         if ($response['success']) {
@@ -34,7 +42,8 @@ class ShopController extends Controller
             return $this->sendError($response['message']);
         }
     }
-    public function update(UpdateShopRequest $request,UpdateShopAction $action)
+
+    public function update(UpdateShopRequest $request, UpdateShopAction $action)
     {
         $response = $action->execute($request);
         if ($response['success']) {
@@ -43,10 +52,11 @@ class ShopController extends Controller
             return $this->sendError($response['message']);
         }
     }
-    public function create(CreateShopRequest $request,CreateShopAction $action)
+
+    public function create(CreateShopRequest $request, CreateShopAction $action)
     {
-        $response = $action->execute($request);
-         if ($response['success']) {
+        $response = $action->execute($request->validated());
+        if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);

@@ -15,4 +15,3 @@ class CustomerRegisterController extends Controller
         return response()->json($customer, 201);
     }
 }
-

@@ -19,7 +19,6 @@ class CustomerRegisterRequest extends FormRequest
             'email' => 'required|email|max:255|unique:customers',
             'password' => 'required|confirmed',
             'method' => 'required|string|in:google,apple,normal',
-
         ];
     }
 

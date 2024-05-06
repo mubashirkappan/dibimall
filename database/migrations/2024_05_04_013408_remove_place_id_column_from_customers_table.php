@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('name')->nullable()->change();
+            if (Schema::hasColumn('customers', 'place_id')) {
+                $table->dropForeign(['place_id']);
+                $table->dropColumn('place_id');
+            }
         });
     }
 
@@ -22,7 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('name')->nullable(false)->change();
+            if (! Schema::hasColumn('customers', 'place_id')) {
+                $table->unsignedBigInteger('place_id');
+                $table->foreign('place_id')->references('id')->on('places')->onDelete('restrict')->onUpdate('cascade');
+            }
         });
     }
 };

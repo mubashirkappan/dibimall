@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Models;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Authenticatable
 {
@@ -16,11 +16,13 @@ class Customer extends Authenticatable
 
     public function getEncryptedIdAttribute()
     {
-      return encrypt($this->id);
-    }    
+        return encrypt($this->id);
+    }
+
     public function place()
     {
-        return $this->hasOne(Place::class,'id','place_id');
+        return $this->belongsTo(Place::class);
     }
+
     protected $appends = ['encrypted_id'];
 }

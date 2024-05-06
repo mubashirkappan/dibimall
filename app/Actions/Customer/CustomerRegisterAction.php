@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use GuzzleHttp\Client;
 
 class CustomerRegisterAction
 {
@@ -31,13 +30,14 @@ class CustomerRegisterAction
                 throw new InvalidArgumentException('Invalid registration method');
                 break;
         }
-        $customer = Customer::create($validatedData);    
+        $customer = Customer::create($validatedData);
         if ($method === 'normal') {
             Auth::login($customer);
             $message = 'Customer registered successfully.';
         } else {
             $message = 'Customer registered and logged in successfully.';
         }
+
         return $this->SuccessResponse($customer, $method, $message);
     }
 
@@ -51,7 +51,7 @@ class CustomerRegisterAction
                 'id' => $customer->id,
                 'email' => $customer->email,
                 'username' => $customer->username,
-                
+
             ];
         }
 

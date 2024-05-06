@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Item\ListItemAction;
-use App\Http\Requests\ListItemRequest;
+use App\Actions\Place\ListPlaceAction;
+use Illuminate\Http\Request;
 
-class ItemController extends BaseController
+class PlaceController extends BaseController
 {
-    public function index(ListItemRequest $request, ListItemAction $action)
+    public function list(Request $request, ListPlaceAction $action)
     {
-        $response = $action->execute($request);
+        $response = $action->execute();
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
