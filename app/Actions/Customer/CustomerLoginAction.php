@@ -89,10 +89,11 @@ class CustomerLoginAction
 
     private function successResponse($customer)
     {
+        $owner=($customer->user_type==2?1:0);
         $success['token'] = $customer->createToken('MyApp')->plainTextToken;
-        $success['id'] = $customer->id;
         $success['email'] = $customer->email;
         $success['username'] = $customer->username;
+        $success['is_owner'] = $owner;
 
         return ['success' => true, 'data' => $success, 'message' => 'User logged in successfully.'];
     }

@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             'whatsapp_number' => $this->whatsapp_number,
             'is_owner' => 0,
         ];
-        if($this->user_type == 1){
+        if($this->user_type == 2){
             $data['is_owner'] = 1;
         }
         return $data;
