@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get-user', [UserController::class, 'getUser']);
+    Route::post('add-to-cart', [CartController::class, 'addToCart']);
+    Route::get('get-cart', [CartController::class, 'getCart']);
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

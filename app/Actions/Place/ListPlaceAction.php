@@ -11,7 +11,7 @@ class ListPlaceAction
     {
         $places = Place::active()->when(request('keyword'), function ($q) {
             $q->where('name', 'like', '%'.request('keyword').'%');
-        })->get();
+        })->orderBy('name')->get();
 
         $data = PlaceResource::collection($places);
 
