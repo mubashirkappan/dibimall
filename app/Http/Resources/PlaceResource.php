@@ -16,7 +16,7 @@ class PlaceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'place' => $this->name,
             'district' => $this->district,
             'state' => $this->state,
             'country' => $this->country,
