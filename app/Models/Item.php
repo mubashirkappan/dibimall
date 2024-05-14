@@ -25,6 +25,7 @@ class Item extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
     public function carts()
     {
         return $this->hasMany(Cart::class, 'item_id', 'item_id');
@@ -35,5 +36,10 @@ class Item extends Model
         return $this->belongsTo(Shop::class);
     }
 
-    protected $appends = ['encrypted_id'];
+    public function getImageUrlAttribute()
+    {
+        return asset('storage/'.$this->image_name);
+    }
+
+    protected $appends = ['encrypted_id', 'image_url'];
 }

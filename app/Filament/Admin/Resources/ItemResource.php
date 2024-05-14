@@ -37,7 +37,6 @@ class ItemResource extends Resource
                     ->numeric()
                     ->prefix('$'),
                 Forms\Components\TextInput::make('dibi_price')
-                    ->required()
                     ->numeric()
                     ->prefix('$'),
 
@@ -45,8 +44,7 @@ class ItemResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\FileUpload::make('image_name')
-                    ->image()
-                    ->required(),
+                    ->image(),
                 Forms\Components\Toggle::make('active')
                     ->required(),
             ]);

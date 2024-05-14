@@ -120,6 +120,6 @@ class CustomerResource extends Resource
 
     public static function canCreate(): bool
     {
-       return false;
+        return false;
     }
 }
