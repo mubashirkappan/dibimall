@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Actions\Cart\GetCartAction;
 use App\Actions\Cart\AddToCartAction;
-use App\Http\Requests\AddToCartRequest;
+use App\Actions\Cart\GetCartAction;
 use App\Actions\Cart\RemoveFromCartAction;
+use App\Http\Requests\AddToCartRequest;
+use Illuminate\Http\Request;
 
 class CartController extends BaseController
 {
- 
     public function addToCart(AddToCartRequest $request, AddToCartAction $action)
     {
         $response = $action->execute($request);
@@ -20,6 +19,7 @@ class CartController extends BaseController
             return $this->sendError($response['message']);
         }
     }
+
     public function getCart(GetCartAction $action)
     {
         $response = $action->execute();

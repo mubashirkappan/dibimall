@@ -26,6 +26,7 @@ class Cart extends Model
         return $this->belongsTo(Item::class);
         // , 'id', 'item_id'
     }
+
     // public function shop()
     // {
     //     return $this->hasOneThrough(Shop::class,Item::class,'id', 'id', 'id', 'shop_id');
