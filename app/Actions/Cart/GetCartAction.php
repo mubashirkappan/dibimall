@@ -10,8 +10,11 @@ class GetCartAction
     public function execute()
     {
         try {
-            $carts = Cart::where('purchased', 0)
+            // Fetch all carts for the authenticated user
+            $carts = Cart::selectRaw('item_id, COUNT(*) as count')
+                ->where('purchased', 0)
                 ->where('customer_id', Auth::id())
+                ->groupBy('item_id')
                 ->with('item')
                 ->get();
 
@@ -25,14 +28,17 @@ class GetCartAction
 
             $organizedData = [];
             foreach ($carts as $cart) {
-                if (! array_key_exists($cart->shop->name, $organizedData)) {
-                    $organizedData[$cart->shop->name] = [];
+                if (!array_key_exists($cart->item->shop->name, $organizedData)) {
+                    $organizedData[$cart->item->shop->name] = [];
                 }
 
-                $organizedData[$cart->shop->name][] = [
+                $organizedData[$cart->item->shop->name][] = [
                     'item_id' => $cart->item_id,
                     'item_name' => $cart->item->name,
                     'image' => $cart->item->image_url,
+                    'price' => $cart->item->price,
+                    'dibi_price' => $cart->item->dibi_price,
+                    'count' => $cart->count,
                 ];
             }
 
