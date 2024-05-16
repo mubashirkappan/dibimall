@@ -11,10 +11,10 @@ class GetCartAction
     {
         try {
             // Fetch all carts for the authenticated user
-            $carts = Cart::selectRaw('item_id, COUNT(*) as count')
+            $carts = Cart::selectRaw('item_id, COUNT(*) as count,shop_id')
                 ->where('purchased', 0)
                 ->where('customer_id', Auth::id())
-                ->groupBy('item_id')
+                ->groupBy('item_id','shop_id')
                 ->with('item')
                 ->get();
 
@@ -39,6 +39,7 @@ class GetCartAction
                     'price' => $cart->item->price,
                     'dibi_price' => $cart->item->dibi_price,
                     'count' => $cart->count,
+                    'shop_id' => $cart->shop_id,
                 ];
             }
 

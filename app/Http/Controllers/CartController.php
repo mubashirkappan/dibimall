@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Cart\AddToCartAction;
+use App\Actions\Cart\ConfirmOrderAction;
 use App\Actions\Cart\GetCartAction;
 use App\Actions\Cart\RemoveFromCartAction;
 use App\Http\Requests\AddToCartRequest;
+use App\Http\Requests\ListItemRequest;
 use Illuminate\Http\Request;
 
 class CartController extends BaseController
@@ -36,6 +38,17 @@ class CartController extends BaseController
         $response = $action->execute($itemId);
         if ($response['success']) {
             return $this->sendSuccess([], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+    
+    public function confirmOrder(ListItemRequest $request, ConfirmOrderAction $action)
+    {
+        $shopId = $request->input('shop_id');
+        $response = $action->execute($shopId);
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }

@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
     Route::get('get-cart', [CartController::class, 'getCart']);
     Route::post('delete-from-cart', [CartController::class, 'removeFromCart']);
+    Route::post('confirm-order', [CartController::class, 'confirmOrder']);
 
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
