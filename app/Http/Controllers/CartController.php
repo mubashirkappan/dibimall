@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Cart\AddToCartAction;
 use App\Actions\Cart\ConfirmOrderAction;
 use App\Actions\Cart\GetCartAction;
+use App\Actions\Cart\ListOrderAction;
 use App\Actions\Cart\RemoveFromCartAction;
 use App\Http\Requests\AddToCartRequest;
 use App\Http\Requests\ListItemRequest;
@@ -53,4 +54,14 @@ class CartController extends BaseController
             return $this->sendError($response['message']);
         }
     }
+    public function listOrders(ListOrderAction $action)
+    {
+        $response = $action->execute(auth()->user()->id);
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+    
 }

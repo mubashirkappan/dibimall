@@ -22,7 +22,7 @@ class ConfirmOrderAction
                     'message' => 'Cart item not found.',
                 ];
             }
-        $order_name = 'DB_ORDER_' . Str::uuid()->toString();
+        $order_name = 'DB_ORDER_' . time();
 
         $order = Order::create(['order_name'=>$order_name,'is_accepted_by_owner'=>0]);
 
