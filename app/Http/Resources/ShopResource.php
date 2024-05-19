@@ -27,7 +27,6 @@ class ShopResource extends JsonResource
             'active' => $this->active,
             'place_id' => $this->place_id,
             'place' => $this->place->name,
-            'items' => $this->Items,
             'categorys' => $this->Categories,
         ];
     }
