@@ -8,8 +8,9 @@ class RemoveFromCartAction
 {
     public function execute($itemId)
     {
-        $cartItem = Cart::where('id', $itemId)
+        $cartItem = Cart::where('item_id', $itemId)
             ->where('customer_id', auth()->user()->id)
+            ->where('purchased',0)
             ->first();
         if (! $cartItem) {
             return [

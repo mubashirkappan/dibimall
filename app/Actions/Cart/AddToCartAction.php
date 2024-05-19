@@ -3,12 +3,14 @@
 namespace App\Actions\Cart;
 
 use App\Models\Cart;
+use App\Models\Item;
 
 class AddToCartAction
 {
     public function execute($request)
     {
-        $total = ($request->item_id * $request->count);
+        $item = Item::find($request->item_id);
+        $total = ($item->dibi_price * $request->count);
         Cart::create(['customer_id' => auth()->user()->id,
             'item_id' => $request['item_id'],
             'count' => $request['count'],

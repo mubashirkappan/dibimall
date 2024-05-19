@@ -35,6 +35,9 @@ class CartController extends BaseController
 
     public function removeFromCart(Request $request, RemoveFromCartAction $action)
     {
+        $request->validate([
+            'item_id' => 'required',
+        ]);
         $itemId = $request->input('item_id');
         $response = $action->execute($itemId);
         if ($response['success']) {
