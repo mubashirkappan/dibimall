@@ -14,7 +14,7 @@ class GetCartAction
             $carts = Cart::selectRaw('item_id, COUNT(*) as count,shop_id')
                 ->where('purchased', 0)
                 ->where('customer_id', Auth::id())
-                ->groupBy('item_id','shop_id')
+                ->groupBy('item_id', 'shop_id')
                 ->with('item')
                 ->get();
 
@@ -28,7 +28,7 @@ class GetCartAction
 
             $organizedData = [];
             foreach ($carts as $cart) {
-                if (!array_key_exists($cart->item->shop->name, $organizedData)) {
+                if (! array_key_exists($cart->item->shop->name, $organizedData)) {
                     $organizedData[$cart->item->shop->name] = [];
                 }
 

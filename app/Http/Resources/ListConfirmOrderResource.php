@@ -14,11 +14,11 @@ class ListConfirmOrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [    
+        return [
             'item' => $this->Item->name,
             'shop' => $this->shop->name,
-            'total_price'=>$this->total_price,
-            'quantity'=>$this->count
+            'total_price' => $this->total_price,
+            'quantity' => $this->count,
         ];
     }
 }

@@ -10,7 +10,7 @@ class RemoveFromCartAction
     {
         $cartItem = Cart::where('item_id', $itemId)
             ->where('customer_id', auth()->user()->id)
-            ->where('purchased',0)
+            ->where('purchased', 0)
             ->first();
         if (! $cartItem) {
             return [
