@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::group(['middleware' => 'is.owner'], function () {
+
+    });
 
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
