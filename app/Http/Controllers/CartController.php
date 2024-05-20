@@ -46,7 +46,7 @@ class CartController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    
+
     public function confirmOrder(ListItemRequest $request, ConfirmOrderAction $action)
     {
         $shopId = $request->input('shop_id');
@@ -57,6 +57,7 @@ class CartController extends BaseController
             return $this->sendError($response['message']);
         }
     }
+
     public function listOrders(ListOrderAction $action)
     {
         $response = $action->execute(auth()->user()->id);
@@ -66,5 +67,4 @@ class CartController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    
 }

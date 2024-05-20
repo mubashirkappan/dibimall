@@ -28,7 +28,7 @@ class GetCartAction
 
             $organizedData = [];
             foreach ($carts as $cart) {
-                if (!array_key_exists($cart->item->shop->name, $organizedData)) {
+                if (! array_key_exists($cart->item->shop->name, $organizedData)) {
                     $organizedData[$cart->item->shop->name] = [];
                 }
 

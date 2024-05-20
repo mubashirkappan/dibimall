@@ -51,7 +51,7 @@ class CustomerRegisterAction
                 'id' => $customer->id,
                 'email' => $customer->email,
                 'username' => $customer->username,
-                'phonenumber'=> $customer->username,
+                'phonenumber' => $customer->username,
 
             ];
         }

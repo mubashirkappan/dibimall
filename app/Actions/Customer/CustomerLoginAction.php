@@ -18,26 +18,21 @@ class CustomerLoginAction
                 throw new Exception('Invalid login method');
             }
 
-            $customer = null;
-            if (isset($request['email'])) {
-                $customer = Customer::where('email', $request['email'])->first();
-            } elseif (isset($request['phonenumber'])) {
-                $customer = Customer::where('phonenumber', $request['phonenumber'])->first();
-            }
+            $customer = $this->findCustomer($request, $method);
 
-            if (!$customer) {
+            if (! $customer) {
                 throw new Exception('Customer not found');
             }
 
             switch ($method) {
                 case 'google':
-                    $this->handleGoogleLogin($customer, $request);
+                    $this->handleOAuthLogin($customer, $request, 'google');
                     break;
                 case 'apple':
-                    $this->handleAppleLogin($customer, $request);
+                    $this->handleOAuthLogin($customer, $request, 'apple');
                     break;
                 case 'normal':
-                    $this->handleNormalLogin($request);
+                    $this->handleNormalLogin($customer, $request);
                     break;
                 default:
                     throw new Exception('Invalid login method');
@@ -52,7 +47,7 @@ class CustomerLoginAction
 
     private function handleGoogleLogin($customer, $request)
     {
-        if (!$customer) {
+        if (! $customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
                 'email' => $request['email'] ?? '',
@@ -61,7 +56,7 @@ class CustomerLoginAction
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -74,7 +69,7 @@ class CustomerLoginAction
 
     private function handleAppleLogin($customer, $request)
     {
-        if (!$customer) {
+        if (! $customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
                 'email' => $request['email'] ?? '',
@@ -83,7 +78,7 @@ class CustomerLoginAction
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -94,20 +89,53 @@ class CustomerLoginAction
         Auth::login($customer);
     }
 
-    private function handleNormalLogin($request)
+    private function findCustomer($request, $method)
     {
-        $credentials = ['password' => $request['password']];
-        $loginSuccessful = false;
-
-        if (isset($request['email'])) {
-            $loginSuccessful = Auth::guard('customer')->attempt(array_merge($credentials, ['email' => $request['email']]));
+        if ($method === 'normal') {
+            if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
+                return Customer::where('email', $request['identifier'])->first();
+            } else {
+                return Customer::where('phonenumber', $request['identifier'])->first();
+            }
+        } else {
+            if (isset($request['email'])) {
+                return Customer::where('email', $request['email'])->first();
+            } elseif (isset($request['phonenumber'])) {
+                return Customer::where('phonenumber', $request['phonenumber'])->first();
+            }
         }
 
-        if (!$loginSuccessful && isset($request['phonenumber'])) {
-            $loginSuccessful = Auth::guard('customer')->attempt(array_merge($credentials, ['phonenumber' => $request['phonenumber']]));
+        return null;
+    }
+
+    private function handleOAuthLogin($customer, $request, $provider)
+    {
+        $accessTokenField = $provider.'_access_token';
+
+        if (! $customer->$accessTokenField || $request['password'] !== $customer->$accessTokenField) {
+            throw new Exception('Invalid Credential');
         }
 
-        if (! $loginSuccessful) {
+        if ($customer->method === 'normal') {
+            $customer->update([$accessTokenField => $request['password']]);
+        }
+
+        Auth::login($customer);
+    }
+
+    private function handleNormalLogin($customer, $request)
+    {
+        $credentials = [
+            'password' => $request['password'],
+        ];
+
+        if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $request['identifier'];
+        } else {
+            $credentials['phonenumber'] = $request['identifier'];
+        }
+
+        if (! Auth::guard('customer')->attempt($credentials)) {
             throw new Exception('Invalid Credential');
         }
     }
