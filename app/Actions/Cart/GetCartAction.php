@@ -11,10 +11,10 @@ class GetCartAction
     {
         try {
             // Fetch all carts for the authenticated user
-            $carts = Cart::selectRaw('item_id, COUNT(*) as count,shop_id')
+            $carts = Cart::select('item_id', 'count','shop_id')
                 ->where('purchased', 0)
                 ->where('customer_id', Auth::id())
-                ->groupBy('item_id','shop_id')
+                ->groupBy('item_id','count','shop_id')
                 ->with('item')
                 ->get();
 
