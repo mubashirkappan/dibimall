@@ -11,10 +11,10 @@ class AddToCartAction
     {
         $item = Item::find($request->item_id);
         $total = ($item->dibi_price * $request->count);
-        Cart::create(['customer_id' => auth()->user()->id,
+        Cart::updateOrCreate(['customer_id' => auth()->user()->id,
             'item_id' => $request['item_id'],
+            'shop_id' => $request['shop_id']],[
             'count' => $request['count'],
-            'shop_id' => $request['shop_id'],
             'total_price' => $total]);
 
         return [
