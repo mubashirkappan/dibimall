@@ -30,6 +30,7 @@ class CustomerRegisterAction
                 throw new InvalidArgumentException('Invalid registration method');
                 break;
         }
+        $validatedData['user_type']=1;
         $customer = Customer::create($validatedData);
         if ($method === 'normal') {
             Auth::login($customer);
