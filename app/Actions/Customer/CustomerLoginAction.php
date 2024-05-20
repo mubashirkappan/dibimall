@@ -13,10 +13,20 @@ class CustomerLoginAction
     {
         try {
             $method = $request['method'] ?? null;
-            $customer = Customer::where('email', $request['email'])->first();
 
             if (! $method || ! in_array($method, ['google', 'apple', 'normal'])) {
                 throw new Exception('Invalid login method');
+            }
+
+            $customer = null;
+            if (isset($request['email'])) {
+                $customer = Customer::where('email', $request['email'])->first();
+            } elseif (isset($request['phonenumber'])) {
+                $customer = Customer::where('phonenumber', $request['phonenumber'])->first();
+            }
+
+            if (!$customer) {
+                throw new Exception('Customer not found');
             }
 
             switch ($method) {
@@ -29,6 +39,8 @@ class CustomerLoginAction
                 case 'normal':
                     $this->handleNormalLogin($request);
                     break;
+                default:
+                    throw new Exception('Invalid login method');
             }
 
             return $this->successResponse($customer);
@@ -40,15 +52,16 @@ class CustomerLoginAction
 
     private function handleGoogleLogin($customer, $request)
     {
-        if (! $customer) {
+        if (!$customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
-                'email' => $request['email'],
+                'email' => $request['email'] ?? '',
+                'phonenumber' => $request['phonenumber'] ?? '',
                 'gmail_access_token' => $request['password'],
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -61,15 +74,16 @@ class CustomerLoginAction
 
     private function handleAppleLogin($customer, $request)
     {
-        if (! $customer) {
+        if (!$customer) {
             $userData = [
                 'username' => $request['username'] ?? '',
-                'email' => $request['email'],
+                'email' => $request['email'] ?? '',
+                'phonenumber' => $request['phonenumber'] ?? '',
                 'apple_access_token' => $request['password'],
                 'password' => Str::random(16),
             ];
             $customer = Customer::create($userData);
-        } elseif (! ($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
+        } elseif (!($customer->gmail_access_token === $request['password'] || $customer->apple_access_token === $request['password'])) {
             throw new Exception('Invalid Credential');
         } elseif ($customer->method === 'normal') {
             $customer->update([
@@ -82,7 +96,18 @@ class CustomerLoginAction
 
     private function handleNormalLogin($request)
     {
-        if (! Auth::guard('customer')->attempt(['email' => $request['email'], 'password' => $request['password']])) {
+        $credentials = ['password' => $request['password']];
+        $loginSuccessful = false;
+
+        if (isset($request['email'])) {
+            $loginSuccessful = Auth::guard('customer')->attempt(array_merge($credentials, ['email' => $request['email']]));
+        }
+
+        if (!$loginSuccessful && isset($request['phonenumber'])) {
+            $loginSuccessful = Auth::guard('customer')->attempt(array_merge($credentials, ['phonenumber' => $request['phonenumber']]));
+        }
+
+        if (! $loginSuccessful) {
             throw new Exception('Invalid Credential');
         }
     }
@@ -92,6 +117,7 @@ class CustomerLoginAction
         $owner = ($customer->user_type == 2 ? 1 : 0);
         $success['token'] = $customer->createToken('MyApp')->plainTextToken;
         $success['email'] = $customer->email;
+        $success['phonenumber'] = $customer->phonenumber;
         $success['username'] = $customer->username;
         $success['is_owner'] = $owner;
 
