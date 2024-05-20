@@ -2,6 +2,7 @@
 
 namespace App\Actions\Customer;
 
+use App\Models\Cart;
 use App\Models\Customer;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -115,11 +116,13 @@ class CustomerLoginAction
     private function successResponse($customer)
     {
         $owner = ($customer->user_type == 2 ? 1 : 0);
+        $item_count = Cart::where('customer_id',$customer->id)->where('purchased',0)->count();
         $success['token'] = $customer->createToken('MyApp')->plainTextToken;
         $success['email'] = $customer->email;
         $success['phonenumber'] = $customer->phonenumber;
         $success['username'] = $customer->username;
         $success['is_owner'] = $owner;
+        $success['total_items'] = $item_count;
 
         return ['success' => true, 'data' => $success, 'message' => 'User logged in successfully.'];
     }
