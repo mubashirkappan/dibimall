@@ -63,7 +63,9 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    public function ownerShopList(OwnerShopListAction $action){
+
+    public function ownerShopList(OwnerShopListAction $action)
+    {
         $response = $action->execute();
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);

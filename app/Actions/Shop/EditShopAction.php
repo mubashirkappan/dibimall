@@ -2,7 +2,6 @@
 
 namespace App\Actions\Shop;
 
-use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use Exception;
 

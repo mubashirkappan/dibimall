@@ -17,12 +17,12 @@ class IsOwner
     {
         $user = auth()->user();
 
-        if ($user && $user->user_type ==2) {
+        if ($user && $user->user_type == 2) {
             return $next($request);
         }
-    
+
         // If the user is not the owner, redirect them back to the previous page
         return redirect()->back()->withErrors(['message' => 'Unauthorized action.']);
-     
+
     }
 }
