@@ -6,6 +6,7 @@ use App\Actions\Shop\CreateShopAction;
 use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
 use App\Actions\Shop\ListShopAction;
+use App\Actions\Shop\OwnerShopListAction;
 use App\Http\Requests\CreateShopRequest;
 
 class ShopController extends BaseController
@@ -56,6 +57,14 @@ class ShopController extends BaseController
     public function create(CreateShopRequest $request, CreateShopAction $action)
     {
         $response = $action->execute($request->validated());
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+    public function ownerShopList(OwnerShopListAction $action){
+        $response = $action->execute();
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {

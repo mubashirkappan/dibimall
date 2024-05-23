@@ -32,7 +32,6 @@ class CreateShopRequest extends FormRequest
             'km' => 'integer',
             'take_away' => 'required|string',
             'top_shop' => 'required|string',
-            'active' => 'required|string',
             'type_id' => 'required|string',
             'place_id' => 'required|string',
             'delivery' => 'required|bool',

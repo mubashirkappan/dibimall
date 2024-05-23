@@ -4,12 +4,13 @@ namespace App\Actions\Shop;
 
 use App\Http\Resources\ShopResource;
 use App\Models\Shop;
+use Exception;
 
 class EditShopAction
 {
     public function execute($encrypted_id)
     {
-        $shop = Shop::find(decrpyt($encrypted_id));
+        $shop = Shop::find(decrypt($encrypted_id));
         if (! $shop) {
             throw new Exception("can't find a shop to delete", 1);
         }
@@ -18,8 +19,6 @@ class EditShopAction
         $data['success'] = true;
 
         return $data;
-        // $shops = Shop::all();
 
-        // return ShopResource::collection($shops);
     }
 }
