@@ -28,6 +28,7 @@ class ShopResource extends JsonResource
             'place_id' => $this->place_id,
             'place' => $this->place->name,
             'categorys' => $this->Categories,
+            'encrypt_id' => $this->encrypted_id,
         ];
     }
 }

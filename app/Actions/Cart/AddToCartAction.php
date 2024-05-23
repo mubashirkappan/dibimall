@@ -13,9 +13,9 @@ class AddToCartAction
         $total = ($item->dibi_price * $request->count);
         Cart::updateOrCreate(['customer_id' => auth()->user()->id,
             'item_id' => $request['item_id'],
-            'shop_id' => $request['shop_id']],[
-            'count' => $request['count'],
-            'total_price' => $total]);
+            'shop_id' => $request['shop_id']], [
+                'count' => $request['count'],
+                'total_price' => $total]);
 
         return [
             'success' => true,
