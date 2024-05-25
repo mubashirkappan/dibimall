@@ -13,8 +13,8 @@ class ItemResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'db_price' => $this->dibi_price,
-            'count' => $this->count,
-            'image_name' => $this->image_name,
+            'available_count' => $this->count,
+            'image_name' => $this->image_url,
             'category_id' => $this->category_id,
             'active' => $this->active,
         ];
