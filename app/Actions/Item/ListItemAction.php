@@ -20,7 +20,7 @@ class ListItemAction
         return [
             'success' => true,
             'data' => $data,
-            'message' => 'places list',
+            'message' => 'Item list',
         ];
     }
 }

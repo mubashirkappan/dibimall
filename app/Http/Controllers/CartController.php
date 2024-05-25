@@ -58,7 +58,7 @@ class CartController extends BaseController
         }
     }
 
-    public function listOrders(ListOrderAction $action)
+    public function listCompleteOrders(ListOrderAction $action)
     {
         $response = $action->execute(auth()->user()->id);
         if ($response['success']) {
