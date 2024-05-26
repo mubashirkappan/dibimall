@@ -19,6 +19,7 @@ class CustomerRegisterRequest extends FormRequest
             'email' => 'nullable|email|max:255|unique:customers',
             'password' => 'required',
             'method' => 'required|string|in:google,apple,normal',
+            'is_owner' => 'required|boolean',
         ];
     }
 
