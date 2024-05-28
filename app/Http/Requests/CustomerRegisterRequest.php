@@ -15,6 +15,7 @@ class CustomerRegisterRequest extends FormRequest
     {
         return [
             'username' => 'max:255',
+            'name' => 'required|max:255',
             'phonenumber' => 'required|max:255|unique:customers',
             'email' => 'nullable|email|max:255|unique:customers',
             'password' => 'required',
