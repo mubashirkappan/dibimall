@@ -8,10 +8,10 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\Action;
 
 class CustomerResource extends Resource
 {
@@ -107,7 +107,7 @@ class CustomerResource extends Resource
                     ->requiresConfirmation()
                     ->color('success')
                     ->icon('heroicon-o-arrow-trending-up'),
-                    Action::make('decline')
+                Action::make('decline')
                     ->label('Decline')
                     ->visible(fn (Customer $record) => $record->user_type == 3)
                     ->action(function (Customer $record) {
@@ -147,8 +147,8 @@ class CustomerResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->orderByRaw("CASE WHEN user_type = 3 THEN 0 ELSE 1 END")
-            ->orderBy('created_at', 'desc'); 
+            ->orderByRaw('CASE WHEN user_type = 3 THEN 0 ELSE 1 END')
+            ->orderBy('created_at', 'desc');
     }
 
     public static function canCreate(): bool
