@@ -26,5 +26,5 @@ class Category extends Model
         return asset('storage/'.$this->image_name);
     }
 
-    protected $appends = ['encrypted_id', , 'image_url'];
+    protected $appends = ['encrypted_id', 'image_url'];
 }
