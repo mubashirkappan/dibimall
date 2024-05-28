@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
 
 class CustomerResource extends Resource
 {
@@ -64,6 +65,20 @@ class CustomerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phonenumber')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('user_type')
+                    ->label('Status')
+                    ->formatStateUsing(function ($state) {
+                        switch ($state) {
+                            case 1:
+                                return 'Customer';
+                            case 2:
+                                return 'Owner';
+                            case 3:
+                                return 'Pending';
+                            default:
+                                return 'Unknown';
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -83,13 +98,29 @@ class CustomerResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('approve')
+                    ->label('Approve')
+                    ->visible(fn (Customer $record) => $record->user_type == 3)
+                    ->action(function (Customer $record) {
+                        $record->update(['user_type' => 2]);
+                    })
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-trending-up'),
+                    Action::make('decline')
+                    ->label('Decline')
+                    ->visible(fn (Customer $record) => $record->user_type == 3)
+                    ->action(function (Customer $record) {
+                        $record->update(['user_type' => 1]);
+                    })
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->icon('heroicon-o-arrow-trending-down'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
             ]);
     }
 
@@ -115,7 +146,9 @@ class CustomerResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->orderByRaw("CASE WHEN user_type = 3 THEN 0 ELSE 1 END")
+            ->orderBy('created_at', 'desc'); 
     }
 
     public static function canCreate(): bool
