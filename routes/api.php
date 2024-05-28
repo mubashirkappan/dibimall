@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('/list', 'ownerShopList');
             // Route::get('/edit/{encrypted_id}', 'edit');
             Route::get('/delete/{encrypted_id}', 'delete');
-            // Route::get('/update', 'update');
+            Route::post('/update', 'update');
         });
     });
 
