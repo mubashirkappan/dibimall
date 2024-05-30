@@ -3,6 +3,7 @@
 namespace App\Actions\Shop;
 
 use App\Models\Customer;
+use App\Models\Place;
 use App\Models\Shop;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -18,8 +19,12 @@ class CreateShopAction
             $logoPath = $fileName;
         }
         $userId = auth()->user()->id;
+        $place = Place::find($request->place_id)->name;
+        $slug = $request->name.$place;
+        $slugValue = $this->checkSlug($slug);
         $shop = Shop::create([
             'name'=>$request->name,
+            'slug'=>$slugValue,
             'address'=>$request->address,
             'landmark'=>$request->landmark,
             'country_code'=>$request->country_code,
@@ -44,5 +49,14 @@ class CreateShopAction
         $data['success'] = true;
 
         return $data;
+    }
+    public function checkSlug($slug){
+        $shop = Shop::where('slug',$slug)->first();
+        if($shop){
+            $random_number = rand(1,100);
+            $slug = $slug.$random_number;
+            $this->checkSlug($slug);
+        }
+        return $slug;
     }
 }
