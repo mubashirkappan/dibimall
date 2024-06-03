@@ -24,7 +24,7 @@ class CreateShopAction
         $slugValue = $this->checkSlug($slug);
         $shop = Shop::create([
             'name'=>$request->name,
-            'slug'=>$slugValue,
+            'slug'=>$request->user_name,
             'address'=>$request->address,
             'landmark'=>$request->landmark,
             'country_code'=>$request->country_code,
