@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::post('create-shop', [ShopController::class, 'create']);
+    Route::post('check-shop-user-name', [ShopController::class, 'checkUserName']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
     Route::get('get-cart', [CartController::class, 'getCart']);
     Route::post('delete-from-cart', [CartController::class, 'removeFromCart']);
