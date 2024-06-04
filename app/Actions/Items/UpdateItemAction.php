@@ -2,7 +2,6 @@
 
 namespace App\Actions\Items;
 
-
 use App\Models\Item;
 
 class UpdateItemAction
@@ -12,6 +11,7 @@ class UpdateItemAction
         try {
             $item = Item::findOrFail($id);
             $item->update($data);
+
             return [
                 'data' => $item,
                 'message' => 'Item updated successfully',

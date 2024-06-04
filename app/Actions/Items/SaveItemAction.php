@@ -2,7 +2,6 @@
 
 namespace App\Actions\Items;
 
-
 use App\Models\Item;
 
 class SaveItemAction
@@ -11,6 +10,7 @@ class SaveItemAction
     {
         try {
             $item = Item::create($data);
+
             return [
                 'data' => $item,
                 'message' => 'Item created successfully',

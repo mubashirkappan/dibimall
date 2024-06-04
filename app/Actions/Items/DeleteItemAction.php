@@ -2,7 +2,6 @@
 
 namespace App\Actions\Items;
 
-
 use App\Models\Item;
 
 class DeleteItemAction
@@ -12,6 +11,7 @@ class DeleteItemAction
         try {
             $item = Item::findOrFail($id);
             $item->delete();
+
             return [
                 'message' => 'Item deleted successfully',
                 'success' => true,

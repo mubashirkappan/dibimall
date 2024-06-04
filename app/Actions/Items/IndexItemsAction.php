@@ -10,6 +10,7 @@ class IndexItemsAction
     {
         try {
             $items = Item::where('shop_id', $shopId)->get();
+
             return [
                 'data' => $items,
                 'message' => 'Items retrieved successfully',
