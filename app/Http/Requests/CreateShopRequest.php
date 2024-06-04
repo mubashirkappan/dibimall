@@ -28,6 +28,7 @@ class CreateShopRequest extends FormRequest
             'landmark' => 'required|string',
             'country_code' => 'required|',
             'phone' => 'required|integer',
+
             'email' => 'required|string',
             'logo' => 'required|file',
             'km' => 'required|integer',
