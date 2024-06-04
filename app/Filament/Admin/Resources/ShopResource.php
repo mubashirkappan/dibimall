@@ -23,6 +23,9 @@ class ShopResource extends Resource
                 Forms\Components\BelongsToSelect::make('place_id')
                     ->relationship('place', 'name')
                     ->required(),
+                Forms\Components\BelongsToSelect::make('customer_id')
+                    ->relationship('customer', 'name')
+                    ->required(),
                 Forms\Components\BelongsToSelect::make('type_id')
                     ->relationship('type', 'name')
                     ->required(),
