@@ -24,13 +24,15 @@ class CreateShopRequest extends FormRequest
         return [
             'name' => 'required|string',
             'address' => 'required|string',
+            'user_name' => 'required|string',
             'landmark' => 'required|string',
-            'country_code' => 'required|string',
-            'phone' => 'required|string',
+            'country_code' => 'required|',
+            'phone' => 'required|integer',
+
             'email' => 'required|string',
             'logo' => 'required|file',
             'km' => 'required|integer',
-            'take_away' => 'required|string',
+            'take_away' => 'required|bool',
             'type_id' => 'required|string',
             'place_id' => 'required|string',
             'delivery' => 'required|bool',

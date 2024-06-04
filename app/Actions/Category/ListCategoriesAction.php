@@ -7,10 +7,14 @@ use App\Models\Category;
 
 class ListCategoriesAction
 {
-    public function execute()
+    public function execute($shopId)
     {
-        $categories = Category::active()->get();
+        $categories = Category::where('shop_id', $shopId)->active()->get();
+        $return['data'] = CategoryResource::collection($categories);
+        $return['message'] = 'category list agianst shop';
+        $return['success'] = true;
 
-        return CategoryResource::collection($categories);
+        return $return;
+
     }
 }

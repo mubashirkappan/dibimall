@@ -25,14 +25,21 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {
             Route::get('/list', 'ownerShopList');
-            // Route::get('/edit/{encrypted_id}', 'edit');
             Route::get('/delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });
+        Route::controller(CategoryController::class)->prefix('categories/')->group(function () {
+            Route::post('/list', 'index');
+            Route::post('/create', 'create');
+            Route::get('delete/{encrypted_id}', 'delete');
+            Route::post('/update', 'update');
+        });
+
     });
 
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::post('create-shop', [ShopController::class, 'create']);
+    Route::post('check-shop-user-name', [ShopController::class, 'checkUserName']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
     Route::get('get-cart', [CartController::class, 'getCart']);
     Route::post('delete-from-cart', [CartController::class, 'removeFromCart']);

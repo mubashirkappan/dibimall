@@ -40,9 +40,11 @@ class Shop extends Model
     {
         return $this->hasMany(Category::class);
     }
+
     public function getImageUrlAttribute()
     {
         return asset('storage/'.$this->image_name);
     }
+
     protected $appends = ['encrypted_id', 'image_url'];
 }

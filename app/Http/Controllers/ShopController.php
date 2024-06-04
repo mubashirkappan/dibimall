@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Shop\CheckUserNameAction;
 use App\Actions\Shop\CreateShopAction;
 use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
@@ -71,6 +72,19 @@ class ShopController extends BaseController
         $response = $action->execute();
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+
+    public function checkUserName(CheckUserNameAction $action)
+    {
+        request()->validate([
+            'user_name' => 'required',
+        ]);
+        $response = $action->execute(request('user_name'));
+        if ($response['success']) {
+            return $this->sendSuccess([], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }
