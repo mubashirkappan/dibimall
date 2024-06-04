@@ -12,7 +12,7 @@ class CreateCategoriesAction
         try {
             if ($request->hasFile('image')) {
                 $fileName = time().'.'.$request->file('image')->getClientOriginalExtension();
-                Storage::disk('local')->put('category/'.$fileName, file_get_contents($request->file('image')), 'public');
+                Storage::disk('public')->put($fileName, file_get_contents($request->file('image')), 'public');
             }
             Category::create([
                 'shop_id' => $request->shop_id,

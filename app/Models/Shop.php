@@ -43,7 +43,7 @@ class Shop extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset('storage/'.$this->image_name);
+        return asset('storage/'.$this->logo_name);
     }
 
     public function customer()
