@@ -76,7 +76,7 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    
+
     public function checkUserName(CheckUserNameAction $action)
     {
         request()->validate([
