@@ -1,15 +1,16 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\PlaceController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });
+        Route::controller(ItemsController::class)->prefix('items/')->group(function () {
+            Route::post('/list', 'index');
+            Route::post('/create', 'create');
+            Route::get('delete/{encrypted_id}', 'delete');
+            Route::post('/update', 'update');
+        });
+
 
     });
 
