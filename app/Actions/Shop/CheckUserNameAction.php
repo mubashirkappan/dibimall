@@ -18,7 +18,7 @@ class CheckUserNameAction
             if($shop){
                 throw new Exception("UserName already taken", 1);
             }
-            $return['success']=false;
+            $return['success']=true;
             $return['message']='you can use the username';
         } catch (\Throwable $th) {
             $return['success']=false;

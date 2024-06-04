@@ -7,11 +7,14 @@ use App\Models\Place;
 use App\Models\Shop;
 use Exception;
 use Illuminate\Support\Facades\Storage;
+use SebastianBergmann\Type\FalseType;
 
 class CreateShopAction
 {
     public function execute($request)
     {
+        try {
+
         
         if ($request->hasFile('logo')) {
             $fileName = time().'.'.$request->file('logo')->getClientOriginalExtension();
@@ -19,9 +22,8 @@ class CreateShopAction
             $logoPath = $fileName;
         }
         $userId = auth()->user()->id;
-        $place = Place::find($request->place_id)->name;
-        $slug = $request->name.$place;
-        $slugValue = $this->checkSlug($slug);
+        $slug = $request->user_name;
+        $this->checkSlug($slug);
         $shop = Shop::create([
             'name'=>$request->name,
             'slug'=>$request->user_name,
@@ -44,19 +46,21 @@ class CreateShopAction
         if (! $shop) {
             throw new Exception('something went wrong at shop create', 1);
         }
-        $data['message'] = 'successfully added a shop';
         $data['data'] = $shop;
+        $data['message'] = 'successfully added a shop';
         $data['success'] = true;
+    } catch (\Throwable $th) {
+        $data['message'] = $th->getMessage();
+        $data['success'] = False;
+    }
 
         return $data;
     }
     public function checkSlug($slug){
         $shop = Shop::where('slug',$slug)->first();
         if($shop){
-            $random_number = rand(1,100);
-            $slug = $slug.$random_number;
-            $this->checkSlug($slug);
+            throw new Exception("user_name already taken", 1);
         }
-        return $slug;
     }
+
 }
