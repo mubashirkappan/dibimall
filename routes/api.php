@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
@@ -29,6 +30,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/update', 'update');
         });
         Route::controller(CategoryController::class)->prefix('categories/')->group(function () {
+            Route::post('/list', 'index');
+            Route::post('/create', 'create');
+            Route::get('delete/{encrypted_id}', 'delete');
+            Route::post('/update', 'update');
+        });
+        Route::controller(ItemsController::class)->prefix('items/')->group(function () {
             Route::post('/list', 'index');
             Route::post('/create', 'create');
             Route::get('delete/{encrypted_id}', 'delete');

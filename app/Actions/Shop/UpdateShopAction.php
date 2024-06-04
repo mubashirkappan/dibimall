@@ -23,18 +23,18 @@ class UpdateShopAction
                 $logoPath = $fileName;
             }
             $shop->update([
-                'name'=>$request->name,
-                'address'=>$request->address,
-                'landmark'=>$request->landmark,
-                'country_code'=>$request->country_code,
-                'phone'=>$request->phone,
-                'email'=>$request->email,
-                'logo_name'=>$logoPath ,
-                'delivery'=>$request->delivery,
-                'km'=>$request->km,
-                'take_away'=>$request->take_away,
-                'type_id'=>$request->type_id,
-                'place_id'=>$request->place_id,
+                'name' => $request->name,
+                'address' => $request->address,
+                'landmark' => $request->landmark,
+                'country_code' => $request->country_code,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'logo_name' => $logoPath,
+                'delivery' => $request->delivery,
+                'km' => $request->km,
+                'take_away' => $request->take_away,
+                'type_id' => $request->type_id,
+                'place_id' => $request->place_id,
             ]);
         }
         $data['message'] = 'successfully updated shop';

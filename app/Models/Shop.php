@@ -45,10 +45,12 @@ class Shop extends Model
     {
         return asset('storage/'.$this->logo_name);
     }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
         // , 'id', 'item_id'
     }
+
     protected $appends = ['encrypted_id', 'image_url'];
 }
