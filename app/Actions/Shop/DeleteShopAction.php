@@ -3,12 +3,13 @@
 namespace App\Actions\Shop;
 
 use App\Models\Shop;
+use Exception;
 
 class DeleteShopAction
 {
     public function execute($encrypted_id)
     {
-        $shop = Shop::find(decrpyt($encrypted_id));
+        $shop = Shop::find(decrypt($encrypted_id));
         if ($shop) {
             $shop->delete();
         } else {

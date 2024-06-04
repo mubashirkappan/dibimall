@@ -13,7 +13,15 @@ class CustomerRegisterAction
     public function execute(array $validatedData)
     {
         $method = $validatedData['method'];
+        $is_owner = $validatedData['is_owner'];
         unset($validatedData['method']);
+        unset($validatedData['is_owner']);
+        if ($is_owner) {
+            $validatedData['user_type'] = 3; //pending
+        } else {
+            $validatedData['user_type'] = 1;
+        }
+
         switch ($method) {
             case 'google':
                 $validatedData['gmail_access_token'] = $validatedData['password'];
@@ -51,6 +59,7 @@ class CustomerRegisterAction
                 'id' => $customer->id,
                 'email' => $customer->email,
                 'username' => $customer->username,
+                'phonenumber' => $customer->username,
 
             ];
         }

@@ -23,8 +23,23 @@ class Cart extends Model
 
     public function Item()
     {
-        return $this->hasOne(Item::class, 'id', 'item_id');
+        return $this->belongsTo(Item::class);
+        // , 'id', 'item_id'
     }
+
+    // public function shop()
+    // {
+    //     return $this->hasOneThrough(Shop::class,Item::class,'id', 'id', 'id', 'shop_id');
+    // }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+    // public function shop()
+    // {
+    //     // Define a custom method to access the shop through the item
+    //     return $this->item->shop();
+    // }
 
     protected $appends = ['encrypted_id'];
 }

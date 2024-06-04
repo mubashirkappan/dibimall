@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::table('items', function (Blueprint $table) {
             $table->unsignedBigInteger('shop_id')->after('category_id');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
+        });
+        Schema::table('carts', function (Blueprint $table) {
+            $table->unsignedBigInteger('shop_id')->after('count');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
         });
     }
 
@@ -22,6 +27,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('items', function (Blueprint $table) {
+            $table->dropForeign(['shop_id']);
+            $table->dropColumn('shop_id');
+        });
+        Schema::table('carts', function (Blueprint $table) {
+            $table->dropForeign(['shop_id']);
             $table->dropColumn('shop_id');
         });
     }

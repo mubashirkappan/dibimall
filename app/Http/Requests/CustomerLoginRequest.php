@@ -23,9 +23,25 @@ class CustomerLoginRequest extends FormRequest
     {
         return [
             'username' => 'max:255',
-            'email' => 'required',
+            'email' => 'required_without_all:phonenumber,identifier|email|max:255',
+            'phonenumber' => 'required_without_all:email,identifier|max:15',
+            'identifier' => 'required_if:method,normal|max:255', // Added for normal login method
             'password' => 'required|string',
             'method' => 'required|in:google,apple,normal',
+        ];
+    }
+
+    /**
+     * Custom messages for validation errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required_without_all' => 'The email field is required when neither phone number nor identifier is present.',
+            'phonenumber.required_without_all' => 'The phone number field is required when neither email nor identifier is present.',
+            'identifier.required_if' => 'The identifier field is required for normal login method.',
         ];
     }
 }

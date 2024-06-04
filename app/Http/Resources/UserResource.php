@@ -14,14 +14,19 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => $this->price,
-            'count' => $this->count,
-            'image_name' => $this->image_name,
-            'category_id' => $this->category_id,
-            'active' => $this->active,
+            'email' => $this->email,
+            'username' => $this->username,
+            'phonenumber' => $this->phonenumber,
+            'whatsapp_number' => $this->whatsapp_number,
+            'is_owner' => 0,
         ];
+        if ($this->user_type == 2) {
+            $data['is_owner'] = 1;
+        }
+
+        return $data;
     }
 }
