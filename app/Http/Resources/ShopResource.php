@@ -17,7 +17,7 @@ class ShopResource extends JsonResource
             'country_code' => $this->country_code,
             'phone' => $this->phone,
             'email' => $this->email,
-            'logo_name' => $this->logo_name,
+            'logo_name' => $this->image_url,
             'category_count' => $this->category_count,
             'image_count' => $this->image_count,
             'type_id' => $this->type_id,

@@ -15,7 +15,7 @@ class CreateShopAction
 
             if ($request->hasFile('logo')) {
                 $fileName = time().'.'.$request->file('logo')->getClientOriginalExtension();
-                Storage::disk('local')->put('shop_logo/'.$fileName, file_get_contents($request->file('logo')), 'public');
+                Storage::disk('public')->put($fileName, file_get_contents($request->file('logo')), 'public');
                 $logoPath = $fileName;
             }
             $userId = auth()->user()->id;
