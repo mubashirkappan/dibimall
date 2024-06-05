@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {
             Route::get('/list', 'ownerShopList');
+            Route::get('/show/{user_name}', 'showShopDetails');
             Route::get('/delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });

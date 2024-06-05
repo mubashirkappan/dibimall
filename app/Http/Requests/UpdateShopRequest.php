@@ -31,7 +31,7 @@ class UpdateShopRequest extends FormRequest
             'email' => 'required|string',
             'logo' => 'required|file',
             'delivery' => 'required|bool',
-            'km' => 'required|integer',
+            'km' => 'nullable|integer',
             'take_away' => 'required|string',
             'type_id' => 'required|string',
             'place_id' => 'required|string',

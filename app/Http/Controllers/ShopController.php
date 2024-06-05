@@ -8,6 +8,7 @@ use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
 use App\Actions\Shop\ListShopAction;
 use App\Actions\Shop\OwnerShopListAction;
+use App\Actions\Shop\ShopDetailsAction;
 use App\Actions\Shop\UpdateShopAction;
 use App\Http\Requests\CreateShopRequest;
 use App\Http\Requests\UpdateShopRequest;
@@ -69,7 +70,8 @@ class ShopController extends BaseController
 
     public function ownerShopList(OwnerShopListAction $action)
     {
-        $response = $action->execute();
+        $shopSlug = request('shop') ? request('shop') : null;
+        $response = $action->execute($shopSlug);
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
@@ -89,4 +91,5 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
+
 }

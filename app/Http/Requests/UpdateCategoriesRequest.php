@@ -25,7 +25,6 @@ class UpdateCategoriesRequest extends FormRequest
             'encrypted_id' => 'required',
             'name' => 'required',
             'shop_id' => 'required',
-            'image' => 'nullable|file',
         ];
     }
 }

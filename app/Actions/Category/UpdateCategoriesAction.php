@@ -11,18 +11,12 @@ class UpdateCategoriesAction
     {
 
         $category = Category::find(decrypt($request->encrypted_id));
-        $fileName = $category->image_name;
-        if ($request->hasFile('image')) {
-            $fileName = time().'.'.$request->file('image')->getClientOriginalExtension();
-            Storage::disk('public')->put($fileName, file_get_contents($request->file('image')), 'public');
-        }
         $category->update([
             'shop_id' => $request->shop_id,
-            'image_name' => $fileName,
             'name' => $request->name,
         ]);
         $return['success'] = true;
-        $return['message'] = 'category updated successfuly';
+        $return['message'] = 'category updated successfully';
 
         return $return;
     }

@@ -31,7 +31,7 @@ class CreateShopRequest extends FormRequest
 
             'email' => 'required|string',
             'logo' => 'required|file',
-            'km' => 'required|integer',
+            'km' => 'nullable|integer',
             'take_away' => 'required|bool',
             'type_id' => 'required|string',
             'place_id' => 'required|string',

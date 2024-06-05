@@ -24,7 +24,6 @@ class CreateCategoriesRequest extends FormRequest
         return [
             'shop_id' => 'required',
             'name' => 'required',
-            'image' => 'required|file',
         ];
     }
 }

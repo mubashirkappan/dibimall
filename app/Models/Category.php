@@ -26,10 +26,6 @@ class Category extends Model
         return $this->belongsTo(Shop::class);
     }
 
-    public function getImageUrlAttribute()
-    {
-        return asset('storage/'.$this->image_name);
-    }
 
-    protected $appends = ['encrypted_id', 'image_url'];
+    protected $appends = ['encrypted_id'];
 }
