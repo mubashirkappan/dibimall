@@ -12,9 +12,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'shop_id' => $this->shop_id,
             'name' => $this->name,
-            'image_name' => $this->image_url,
             'encrypted_id' => $this->encrypted_id,
-            'active' => $this->active,
         ];
     }
 }
