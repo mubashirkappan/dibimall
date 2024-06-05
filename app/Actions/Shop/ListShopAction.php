@@ -20,7 +20,7 @@ class ListShopAction
         $shops = Shop::with('Items')->active()->when($placeId, function ($q) use ($placeId) {
             $q->whereIn('place_id', $placeId);
         })->when($shop, function ($q) use ($shop) {
-            $q->where('name', $shop);
+            $q->where('slug', $shop);
         })->get();
         // Shop::with('Items')->get()->dd();
 

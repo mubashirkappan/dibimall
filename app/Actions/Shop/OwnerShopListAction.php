@@ -7,10 +7,12 @@ use App\Models\Shop;
 
 class OwnerShopListAction
 {
-    public function execute()
+    public function execute($shopSlug)
     {
 
-        $shops = Shop::with('Items')->active()->where('customer_id', auth()->user()->id)->get();
+        $shops = Shop::with('Items')->active()->where('customer_id', auth()->user()->id)->when($shopSlug,function($q) use ($shopSlug){
+            $q->where('slug',$shopSlug);
+        })->get();
         $data = ShopResource::collection($shops);
 
         return [

@@ -70,7 +70,8 @@ class ShopController extends BaseController
 
     public function ownerShopList(OwnerShopListAction $action)
     {
-        $response = $action->execute();
+        $shopSlug = request('shop') ? request('shop') : null;
+        $response = $action->execute($shopSlug);
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
@@ -84,15 +85,6 @@ class ShopController extends BaseController
             'user_name' => 'required',
         ]);
         $response = $action->execute(request('user_name'));
-        if ($response['success']) {
-            return $this->sendSuccess([], $response['message']);
-        } else {
-            return $this->sendError($response['message']);
-        }
-    }
-    public function showShopDetails(ShopDetailsAction $action,$user_name)
-    {
-        $response = $action->execute($user_name);
         if ($response['success']) {
             return $this->sendSuccess([], $response['message']);
         } else {
