@@ -26,6 +26,5 @@ class Category extends Model
         return $this->belongsTo(Shop::class);
     }
 
-
     protected $appends = ['encrypted_id'];
 }

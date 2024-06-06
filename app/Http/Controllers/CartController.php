@@ -7,6 +7,7 @@ use App\Actions\Cart\ConfirmOrderAction;
 use App\Actions\Cart\GetCartAction;
 use App\Actions\Cart\ListOrderAction;
 use App\Actions\Cart\RemoveFromCartAction;
+use App\Actions\Shop\OrdersForShopAction;
 use App\Http\Requests\AddToCartRequest;
 use App\Http\Requests\ListItemRequest;
 use Illuminate\Http\Request;
@@ -59,6 +60,16 @@ class CartController extends BaseController
     }
 
     public function listCompleteOrders(ListOrderAction $action)
+    {
+        $response = $action->execute(auth()->user()->id);
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+
+    public function ordersForShop(OrdersForShopAction $action)
     {
         $response = $action->execute(auth()->user()->id);
         if ($response['success']) {

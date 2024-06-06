@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });
+        Route::get('get-orders', [CartController::class, 'ordersForShop']);
 
     });
 
