@@ -8,7 +8,6 @@ use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
 use App\Actions\Shop\ListShopAction;
 use App\Actions\Shop\OwnerShopListAction;
-use App\Actions\Shop\ShopDetailsAction;
 use App\Actions\Shop\UpdateShopAction;
 use App\Http\Requests\CreateShopRequest;
 use App\Http\Requests\UpdateShopRequest;
@@ -91,5 +90,4 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-
 }

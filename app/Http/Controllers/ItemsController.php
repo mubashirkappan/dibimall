@@ -26,7 +26,7 @@ class ItemsController extends Controller
 
     public function create(CreateItemRequest $request, SaveItemAction $action)
     {
-        $response = $action->execute($request->validated());
+        $response = $action->execute($request);
         if ($response['success']) {
             return (new ItemResource($response['data']))
                 ->additional(['message' => $response['message'], 'success' => $response['success']]);
