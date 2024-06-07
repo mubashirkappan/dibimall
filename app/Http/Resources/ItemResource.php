@@ -17,6 +17,7 @@ class ItemResource extends JsonResource
             'image_name' => $this->image_url,
             'category_id' => $this->category_id,
             'active' => $this->active,
+            'encrypted_id' => $this->encrypted_id,
         ];
     }
 }
