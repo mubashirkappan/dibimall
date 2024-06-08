@@ -38,8 +38,10 @@ class OrdersForShopAction
                 'price' => $cart->item->price,
                 'dibi_price' => $cart->item->dibi_price,
                 'count' => $cart->count,
-                'shop_id' => $cart->shop_id,
-                'customer' => $cart->Customer->name,
+                'customer_name' => $cart->Customer->name,
+                'customer_number' => $cart->Customer->phonenumber,
+                'order_id' => $cart->order->id,
+                'order_name' => $cart->order->order_name,
             ];
             $organizedData[$cart->shop->name]['total'] = $total_paid[$cart->shop->name];
             $organizedData[$cart->shop->name]['totalNormal'] = $total_paid_normal_by_shop[$cart->shop->name];

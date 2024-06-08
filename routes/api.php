@@ -42,7 +42,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });
-        Route::get('get-orders', [CartController::class, 'ordersForShop']);
+        Route::controller(CartController::class)->group(function () {
+            Route::post('complete-order', 'completeOrder');
+            Route::post('accept-order', 'acceptOrder');
+            Route::get('get-orders', 'ordersForShop');
+        });
 
     });
 

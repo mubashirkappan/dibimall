@@ -21,6 +21,21 @@ class Cart extends Model
         return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 
+    public function orderItem()
+    {
+        return $this->hasOne(OrderItem::class);
+    }
+
+    public function order()
+    {
+        return $this->hasOneThrough(Order::class, OrderItem::class, 'id', 'id', 'id', 'order_id');
+    }
+    // public function order()
+
+    // {
+    //     return $this->orderItem()->order;
+    // }
+
     public function Item()
     {
         return $this->belongsTo(Item::class);
