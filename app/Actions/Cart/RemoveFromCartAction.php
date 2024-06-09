@@ -19,9 +19,11 @@ class RemoveFromCartAction
             ];
         }
         $cartItem->delete();
+        $data['cartItemCountNotPurchased'] = Cart::where('customer_id', auth()->user()->id)->where('purchased', 0)->count();
 
         return [
             'success' => true,
+            'data' => $data,
             'message' => 'Item removed from cart successfully.',
         ];
     }
