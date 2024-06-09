@@ -44,7 +44,7 @@ class CartController extends BaseController
         $itemId = $request->input('item_id');
         $response = $action->execute($itemId);
         if ($response['success']) {
-            return $this->sendSuccess([], $response['message']);
+            return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }

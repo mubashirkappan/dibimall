@@ -19,6 +19,11 @@ class CreateShopAction
                 $logoPath = $fileName;
             }
             $userId = auth()->user()->id;
+            $shopLimit = Customer::find($userId)->shop_count;
+            $shopCount = Shop::where('customer_id', $userId)->count();
+            if ($shopCount >= $shopLimit) {
+                throw new Exception('you have already added one shop if you add more please contact admin', 1);
+            }
             $slug = $request->user_name;
             $this->checkSlug($slug);
             $shop = Shop::create([
