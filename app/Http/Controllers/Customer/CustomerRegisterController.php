@@ -10,7 +10,9 @@ class CustomerRegisterController extends Controller
 {
     public function register(CustomerRegisterRequest $request, CustomerRegisterAction $action)
     {
-        $customer = $action->execute($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['reffered_by'] = request()->reffered_by;
+        $customer = $action->execute($validatedData);
 
         return response()->json($customer, 201);
     }

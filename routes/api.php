@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\ReferController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -52,6 +53,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
+    Route::get('refer', [ReferController::class, 'refer']);
     Route::post('create-shop', [ShopController::class, 'create']);
     Route::post('check-shop-user-name', [ShopController::class, 'checkUserName']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
