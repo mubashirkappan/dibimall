@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::get('get-user', [UserController::class, 'getUser']);
+    Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
     Route::post('create-shop', [ShopController::class, 'create']);
     Route::post('check-shop-user-name', [ShopController::class, 'checkUserName']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
