@@ -25,6 +25,7 @@ class UpdateShopRequest extends FormRequest
             'encrypted_id' => 'required',
             'name' => 'required|string',
             'address' => 'required|string',
+            'user_name' => 'required|string',
             'landmark' => 'required|string',
             'country_code' => 'required|string',
             'phone' => 'required|string',

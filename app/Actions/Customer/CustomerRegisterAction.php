@@ -38,6 +38,14 @@ class CustomerRegisterAction
                 throw new InvalidArgumentException('Invalid registration method');
                 break;
         }
+        $randomString = Str::random(6); // Adjust the length as needed
+        $referralCode = 'dbmall'.$randomString;
+        if ($validatedData['reffered_by']) {
+            $refered_user = Customer::where('referal_code', $validatedData['reffered_by'])->first();
+            $refered_user->increment('reward_coin', 100);
+            $validatedData['reffered_by'] = $refered_user->id;
+        }
+        $validatedData['referal_code'] = $referralCode;
         $customer = Customer::create($validatedData);
         if ($method === 'normal') {
             Auth::login($customer);
@@ -59,7 +67,6 @@ class CustomerRegisterAction
                 'id' => $customer->id,
                 'email' => $customer->email,
                 'username' => $customer->username,
-                'phonenumber' => $customer->username,
 
             ];
         }
