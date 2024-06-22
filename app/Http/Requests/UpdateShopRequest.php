@@ -30,7 +30,7 @@ class UpdateShopRequest extends FormRequest
             'country_code' => 'required|string',
             'phone' => 'required|string',
             'email' => 'required|string',
-            'logo' => 'required|file',
+            'logo' => 'nullable|file',
             'delivery' => 'required|bool',
             'km' => 'nullable|integer',
             'take_away' => 'required|string',
