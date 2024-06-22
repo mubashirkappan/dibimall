@@ -19,7 +19,7 @@ class CreateItemRequest extends FormRequest
             'price' => 'required|numeric',
             'dibi_price' => 'required|numeric',
             'count' => 'required|integer',
-            'image' => 'required|file',
+            'image' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'shop_id' => 'required|exists:shops,id',
             'active' => 'boolean',
