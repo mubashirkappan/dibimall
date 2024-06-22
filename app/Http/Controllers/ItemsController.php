@@ -49,7 +49,7 @@ class ItemsController extends Controller
 
     public function update(CreateItemRequest $request, UpdateItemAction $action)
     {
-        $response = $action->execute($request->validated(), $request->id);
+        $response = $action->execute($request, $request->id);
         if ($response['success']) {
             return (new ItemResource($response['data']))
                 ->additional(['message' => $response['message'], 'success' => $response['success']]);
