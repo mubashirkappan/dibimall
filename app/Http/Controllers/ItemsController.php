@@ -47,7 +47,7 @@ class ItemsController extends Controller
         }
     }
 
-    public function update(SaveItemRequest $request, UpdateItemAction $action)
+    public function update(CreateItemRequest $request, UpdateItemAction $action)
     {
         $response = $action->execute($request->validated(), $request->id);
         if ($response['success']) {
