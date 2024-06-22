@@ -9,11 +9,12 @@ class UpdateShopAction
 {
     public function execute($request)
     {
-        $shop = Shop::find($request->encrypted_id);
+        $shop = Shop::find(decrypt($request->encrypted_id));
         unset($request->encrypted_id);
         if (! $shop) {
-            throw new \Exception("can't find a shop to delete", 1);
+            throw new \Exception("can't find a shop to update", 1);
         } else {
+            $logoPath=$shop->logo_name;
             if ($request->hasFile('logo')) {
                 if (Storage::disk('local')->exists('shop_logo/'.$shop->logo_name)) {
                     Storage::disk('local')->delete('shop_logo/'.$shop->logo_name);
@@ -31,7 +32,7 @@ class UpdateShopAction
                 'email' => $request->email,
                 'logo_name' => $logoPath,
                 'delivery' => $request->delivery,
-                'km' => $request->km,
+                'km' => $request->km??$shop->km,
                 'take_away' => $request->take_away,
                 'type_id' => $request->type_id,
                 'place_id' => $request->place_id,
