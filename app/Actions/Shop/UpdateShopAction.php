@@ -16,11 +16,11 @@ class UpdateShopAction
         } else {
             $logoPath=$shop->logo_name;
             if ($request->hasFile('logo')) {
-                if (Storage::disk('local')->exists('shop_logo/'.$shop->logo_name)) {
-                    Storage::disk('local')->delete('shop_logo/'.$shop->logo_name);
+                if (Storage::disk('public')->exists($shop->logo_name)) {
+                    Storage::disk('public')->delete($shop->logo_name);
                 }
                 $fileName = time().'.'.$request->file('logo')->getClientOriginalExtension();
-                Storage::disk('local')->put('shop_logo/'.$fileName, file_get_contents($request->file('logo')), 'public');
+                Storage::disk('public')->put($fileName, file_get_contents($request->file('logo')), 'public');
                 $logoPath = $fileName;
             }
             $shop->update([
