@@ -6,6 +6,7 @@ use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReferController;
 use App\Http\Controllers\ShopController;
@@ -37,6 +38,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
         });
+        Route::controller(OfferController::class)->prefix('offer/')->group(function () {
+            Route::get('main-list', 'MainIndex');
+            Route::post('/inside-shop-list', 'InsideShopIndex');
+            Route::get('/random-list', 'RandomIndex');
+            Route::post('/create', 'addImage');
+            Route::get('delete/{id}', 'delete');
+        });
         Route::controller(ItemsController::class)->prefix('items/')->group(function () {
             Route::post('/list', 'index');
             Route::post('/create', 'create');
@@ -52,6 +60,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::get('get-user', [UserController::class, 'getUser']);
+    Route::post('track-phone-click', [UserController::class, 'trackPhoneClick']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
     Route::get('refer', [ReferController::class, 'refer']);
     Route::post('create-shop', [ShopController::class, 'create']);
@@ -69,6 +78,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
+Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);

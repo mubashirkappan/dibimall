@@ -3,6 +3,8 @@
 namespace App\Actions\Items;
 
 use App\Models\Item;
+use App\Models\Shop;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class SaveItemAction
@@ -10,13 +12,17 @@ class SaveItemAction
     public function execute($request)
     {
         try {
+            $shop = Shop::find($request->shop_id);
+            if($shop->items->count()>=$shop->item_count){
+                throw new Exception("your limit is exceeded to add items please contact admin", 1);
+            }
             if ($request->hasFile('image')) {
                 $fileName = time().'.'.$request->file('image')->getClientOriginalExtension();
                 Storage::disk('public')->put($fileName, file_get_contents($request->file('image')), 'public');
                 $logoPath = $fileName;
             }
             $item = Item::create([
-
+                'message'=> $request->message,
                 'name' => $request->name,
                 'price' => $request->price,
                 'dibi_price' => $request->dibi_price,

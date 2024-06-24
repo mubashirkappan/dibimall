@@ -36,6 +36,7 @@ class UpdateShopAction
                 'take_away' => $request->take_away,
                 'type_id' => $request->type_id,
                 'place_id' => $request->place_id,
+                'free_delivery_above' => $request->free_delivery_above,
             ]);
         }
         $data['message'] = 'successfully updated shop';

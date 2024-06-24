@@ -40,7 +40,7 @@ class CustomerRegisterAction
         }
         $randomString = Str::random(6); // Adjust the length as needed
         $referralCode = 'dbmall'.$randomString;
-        if ($validatedData['reffered_by']) {
+        if (isset($validatedData['reffered_by'])) {
             $refered_user = Customer::where('referal_code', $validatedData['reffered_by'])->first();
             $refered_user->increment('reward_coin', 100);
             $validatedData['reffered_by'] = $refered_user->id;

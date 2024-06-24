@@ -6,6 +6,7 @@ use App\Actions\Shop\CheckUserNameAction;
 use App\Actions\Shop\CreateShopAction;
 use App\Actions\Shop\DeleteShopAction;
 use App\Actions\Shop\EditShopAction;
+use App\Actions\Shop\GetShopsWithSlugAndImage;
 use App\Actions\Shop\ListShopAction;
 use App\Actions\Shop\OwnerShopListAction;
 use App\Actions\Shop\UpdateShopAction;
@@ -86,6 +87,14 @@ class ShopController extends BaseController
         $response = $action->execute(request('user_name'));
         if ($response['success']) {
             return $this->sendSuccess([], $response['message']);
+        } else {
+            return $this->sendError($response['message']);
+        }
+    }
+    public function shopImageAndSlug(GetShopsWithSlugAndImage $action){
+        $response = $action->execute();
+        if ($response['success']) {
+            return $this->sendSuccess($response['data'], $response['message']);
         } else {
             return $this->sendError($response['message']);
         }

@@ -8,7 +8,7 @@ class OrdersForShopAction
 {
     public function execute($userId)
     {
-        $cartItems = Cart::with(['shop'])->whereHas('shop', function ($q) use ($userId) {
+        $cartItems = Cart::where('purchased',1)->with(['shop'])->whereHas('shop', function ($q) use ($userId) {
             $q->where('customer_id', $userId);
         })->get();
         $organizedData = [];
@@ -28,15 +28,15 @@ class OrdersForShopAction
                     // 'totalNormal' => 0,
                 ];
             }
-            $total_paid[$cart->shop->name] += $cart->item->dibi_price * $cart->count;
-            $total_paid_normal_by_shop[$cart->shop->name] += $cart->item->price * $cart->count;
-            $total_paid_in_normal[$cart->shop->name] += $cart->item->price * $cart->count;
+            $total_paid[$cart->shop->name] += $cart->dibi_price * $cart->count;
+            $total_paid_normal_by_shop[$cart->shop->name] += $cart->price * $cart->count;
+            $total_paid_in_normal[$cart->shop->name] += $cart->price * $cart->count;
             $organizedData[$cart->shop->name]['items'][] = [
                 'item_id' => $cart->item_id,
                 'item_name' => $cart->item->name,
                 'image' => $cart->item->image_url,
-                'price' => $cart->item->price,
-                'dibi_price' => $cart->item->dibi_price,
+                'price' => $cart->price,
+                'dibi_price' => $cart->dibi_price,
                 'count' => $cart->count,
                 'customer_name' => $cart->Customer->name,
                 'customer_number' => $cart->Customer->phonenumber,
