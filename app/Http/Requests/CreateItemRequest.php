@@ -26,6 +26,7 @@ class CreateItemRequest extends FormRequest
             'offer' => 'boolean',
             'percentage' => 'nullable|numeric',
             'amount' => 'nullable|numeric',
+            'message' => 'nullable|string',
         ];
     }
 }

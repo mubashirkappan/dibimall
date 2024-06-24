@@ -22,7 +22,7 @@ class SaveItemAction
                 $logoPath = $fileName;
             }
             $item = Item::create([
-
+                'message'=> $request->message,
                 'name' => $request->name,
                 'price' => $request->price,
                 'dibi_price' => $request->dibi_price,
