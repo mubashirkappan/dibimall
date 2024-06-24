@@ -6,6 +6,7 @@ use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReferController;
 use App\Http\Controllers\ShopController;
@@ -36,6 +37,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/create', 'create');
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
+        });
+        Route::controller(OfferController::class)->prefix('offer/')->group(function () {
+            Route::get('main-list', 'MainIndex');
+            Route::post('/inside-shop-list', 'InsideShopIndex');
+            Route::get('/random-list', 'RandomIndex');
+            Route::post('/create', 'addImage');
+            Route::get('delete/{id}', 'delete');
         });
         Route::controller(ItemsController::class)->prefix('items/')->group(function () {
             Route::post('/list', 'index');
