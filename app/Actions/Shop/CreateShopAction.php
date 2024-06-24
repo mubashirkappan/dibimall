@@ -43,6 +43,7 @@ class CreateShopAction
                 'active' => 1,
                 'image_count' => 1,
                 'customer_id' => $userId,
+                'free_delivery_above' => $request->free_delivery_above,
             ]);
             Customer::find($userId)->update(['user_type' => 2]);
             if (! $shop) {

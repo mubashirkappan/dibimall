@@ -36,6 +36,7 @@ class UpdateShopRequest extends FormRequest
             'take_away' => 'required|string',
             'type_id' => 'required|string',
             'place_id' => 'required|string',
+            'free_delivery_above' => 'required|integer',
         ];
     }
 }
