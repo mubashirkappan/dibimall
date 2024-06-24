@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::get('get-user', [UserController::class, 'getUser']);
+    Route::post('track-phone-click', [UserController::class, 'trackPhoneClick']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
     Route::get('refer', [ReferController::class, 'refer']);
     Route::post('create-shop', [ShopController::class, 'create']);
