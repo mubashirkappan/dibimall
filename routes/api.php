@@ -69,6 +69,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
+Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
