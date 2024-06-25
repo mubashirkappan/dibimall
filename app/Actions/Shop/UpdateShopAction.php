@@ -14,7 +14,7 @@ class UpdateShopAction
         if (! $shop) {
             throw new \Exception("can't find a shop to update", 1);
         } else {
-            $logoPath=$shop->logo_name;
+            $logoPath = $shop->logo_name;
             if ($request->hasFile('logo')) {
                 if (Storage::disk('public')->exists($shop->logo_name)) {
                     Storage::disk('public')->delete($shop->logo_name);
@@ -32,7 +32,7 @@ class UpdateShopAction
                 'email' => $request->email,
                 'logo_name' => $logoPath,
                 'delivery' => $request->delivery,
-                'km' => $request->km??$shop->km,
+                'km' => $request->km ?? $shop->km,
                 'take_away' => $request->take_away,
                 'type_id' => $request->type_id,
                 'place_id' => $request->place_id,

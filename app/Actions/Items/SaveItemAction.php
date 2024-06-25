@@ -13,8 +13,8 @@ class SaveItemAction
     {
         try {
             $shop = Shop::find($request->shop_id);
-            if($shop->items->count()>=$shop->item_count){
-                throw new Exception("your limit is exceeded to add items please contact admin", 1);
+            if ($shop->items->count() >= $shop->item_count) {
+                throw new Exception('your limit is exceeded to add items please contact admin', 1);
             }
             if ($request->hasFile('image')) {
                 $fileName = time().'.'.$request->file('image')->getClientOriginalExtension();
@@ -22,7 +22,7 @@ class SaveItemAction
                 $logoPath = $fileName;
             }
             $item = Item::create([
-                'message'=> $request->message,
+                'message' => $request->message,
                 'name' => $request->name,
                 'price' => $request->price,
                 'dibi_price' => $request->dibi_price,

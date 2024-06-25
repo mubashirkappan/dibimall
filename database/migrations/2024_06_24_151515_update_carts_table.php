@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->decimal('price',12,2)->after('item_id')->nullable();
-            $table->decimal('dibi_price',12,2)->after('price')->nullable();
+            $table->decimal('price', 12, 2)->after('item_id')->nullable();
+            $table->decimal('dibi_price', 12, 2)->after('price')->nullable();
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->dropColumn(['price','dibi_price']);
+            $table->dropColumn(['price', 'dibi_price']);
         });
     }
 };

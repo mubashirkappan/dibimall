@@ -91,7 +91,9 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    public function shopImageAndSlug(GetShopsWithSlugAndImage $action){
+
+    public function shopImageAndSlug(GetShopsWithSlugAndImage $action)
+    {
         $response = $action->execute();
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);

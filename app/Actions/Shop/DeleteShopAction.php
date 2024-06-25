@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Models\OrderItem;
 use App\Models\Shop;
-use Exception;
 use Illuminate\Support\Facades\DB;
 
 class DeleteShopAction

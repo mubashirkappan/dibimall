@@ -11,7 +11,7 @@ class UpdateItemAction
     {
         try {
             $item = Item::findOrFail($id);
-            $logoPath=$item->image_name;
+            $logoPath = $item->image_name;
             if ($request->hasFile('image')) {
                 $fileName = time().'.'.$request->file('image')->getClientOriginalExtension();
                 Storage::disk('public')->put($fileName, file_get_contents($request->file('image')), 'public');

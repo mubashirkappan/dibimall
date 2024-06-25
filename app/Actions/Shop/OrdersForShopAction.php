@@ -8,7 +8,7 @@ class OrdersForShopAction
 {
     public function execute($userId)
     {
-        $cartItems = Cart::where('purchased',1)->with(['shop'])->whereHas('shop', function ($q) use ($userId) {
+        $cartItems = Cart::where('purchased', 1)->with(['shop'])->whereHas('shop', function ($q) use ($userId) {
             $q->where('customer_id', $userId);
         })->get();
         $organizedData = [];

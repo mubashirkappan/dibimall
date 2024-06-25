@@ -28,10 +28,10 @@ class OneTimeCommand extends Command
     public function handle()
     {
         $customers = Customer::get();
-        foreach ($customers as  $value) {
+        foreach ($customers as $value) {
             $randomString = str::random(6); // Adjust the length as needed
             $referralCode = 'dbmall'.$randomString;
-            $value->update(['referal_code'=>$referralCode]);
-        } 
+            $value->update(['referal_code' => $referralCode]);
+        }
     }
 }
