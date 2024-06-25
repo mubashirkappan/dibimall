@@ -21,7 +21,7 @@ class CustomerRegisterRequest extends FormRequest
             'password' => 'required',
             'method' => 'required|string|in:google,apple,normal',
             'is_owner' => 'required|boolean',
-            'reffered_by' => 'nullable',
+            'reffered_by' => 'nullable|exists:customers,referal_code',
         ];
     }
 
