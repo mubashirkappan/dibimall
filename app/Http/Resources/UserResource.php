@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'phonenumber' => $this->phonenumber,
             'whatsapp_number' => $this->whatsapp_number,
             'is_owner' => 0,
+            'rewards' => $this->reward_coin,
         ];
         if ($this->user_type == 2) {
             $data['is_owner'] = 1;
