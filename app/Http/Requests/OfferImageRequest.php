@@ -22,8 +22,8 @@ class OfferImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'shop_id'=>['required'],
-            'image'=>['required','file']
+            'shop_id' => ['required'],
+            'image' => ['required', 'file'],
         ];
     }
 }

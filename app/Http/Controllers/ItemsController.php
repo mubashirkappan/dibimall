@@ -7,7 +7,6 @@ use App\Actions\Items\IndexItemsAction;
 use App\Actions\Items\SaveItemAction;
 use App\Actions\Items\UpdateItemAction;
 use App\Http\Requests\CreateItemRequest;
-use App\Http\Requests\SaveItemRequest;
 use App\Http\Resources\ItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;

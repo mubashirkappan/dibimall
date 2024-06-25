@@ -14,21 +14,27 @@ class UserController extends BaseController
 
         return $this->sendSuccess($data, 'user details');
     }
-    public function updateToOwner(){
+
+    public function updateToOwner()
+    {
         $user = auth()->user();
-        if($user->user_type == 1){
-            $user->user_type =3;
+        if ($user->user_type == 1) {
+            $user->user_type = 3;
             $user->save();
-        }else{
+        } else {
             return $this->sendError('you are already owner');
         }
+
         return $this->sendSuccess([], 'user requested for ownership');
     }
-    public function trackPhoneClick(){
+
+    public function trackPhoneClick()
+    {
         request()->validate([
             'shop_id' => 'required',
         ]);
-        TrackPhonenumberClickedUser::create(['shop_id'=>request('shop_id'),'customer_id'=>auth()->user()->id]);
+        TrackPhonenumberClickedUser::create(['shop_id' => request('shop_id'), 'customer_id' => auth()->user()->id]);
+
         return $this->sendSuccess([], 'user can show the number');
     }
 }
