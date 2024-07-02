@@ -30,6 +30,7 @@ class CustomerRegisterRequest extends FormRequest
         return [
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'This email is already registered. Please use a different email or login with your existing account',
+            'reffered_by.exists' => 'The referral code you entered is incorrect. Please check and try again',
         ];
     }
 }

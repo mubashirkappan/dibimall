@@ -10,10 +10,11 @@ class ListOrderAction
     {
         $cartItems = Cart::where('customer_id', $userId)->where('purchased', 1)
             ->get();
-        if (! $cartItems) {
+        if ($cartItems->isEmpty()) {
             return [
                 'success' => false,
-                'message' => 'Cart item not found.',
+                'message' => 'It looks like your cart is empty. add items to your cart and start your shopping journey!',
+
             ];
         }
 
@@ -32,6 +33,7 @@ class ListOrderAction
                     'items' => [],
                     'total' => 0,
                     'totalNormal' => 0,
+                    'date' => null,
                 ];
             }
             $total_paid[$cart->shop->name] += $cart->dibi_price * $cart->count;
@@ -48,6 +50,7 @@ class ListOrderAction
             ];
             $organizedData[$cart->shop->name]['total'] = $total_paid[$cart->shop->name];
             $organizedData[$cart->shop->name]['totalNormal'] = $total_paid_normal_by_shop[$cart->shop->name];
+            $organizedData[$cart->shop->name]['created_at'] = $cart->created_at;
             $total += $total_paid[$cart->shop->name];
             $totalNormal += $total_paid_in_normal[$cart->shop->name];
         }
