@@ -11,6 +11,11 @@ class Cart extends Model
 
     protected $guarded = [];
 
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('M j, Y h:i A');
+    }
+
     public function getEncryptedIdAttribute()
     {
         return encrypt($this->id);
