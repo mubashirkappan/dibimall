@@ -61,6 +61,9 @@ class ShopResource extends Resource
                 Forms\Components\TextInput::make('image_count')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('item_count')
+                    ->required()
+                    ->numeric(),
 
                 Forms\Components\Toggle::make('take_away')
                     ->required(),
@@ -75,25 +78,25 @@ class ShopResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('type_id')
+                Tables\Columns\TextColumn::make('type.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('place_id')
+                Tables\Columns\TextColumn::make('place.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('landmark')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('country_code')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('logo_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category_count')
+                Tables\Columns\ImageColumn::make('logo_name'),
+                Tables\Columns\TextColumn::make('item_count')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('image_count')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('delivery')

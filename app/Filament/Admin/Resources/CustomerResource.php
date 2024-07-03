@@ -23,9 +23,6 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\BelongsToSelect::make('place_id')
-                    ->relationship('place', 'name')
-                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -35,10 +32,10 @@ class CustomerResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                // Forms\Components\TextInput::make('password')
+                //     ->password()
+                //     ->required()
+                //     ->maxLength(255),
                 Forms\Components\TextInput::make('firstname')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('lastname')
@@ -55,14 +52,14 @@ class CustomerResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('username')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('username')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('firstname')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('lastname')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('firstname')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('lastname')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('phonenumber')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user_type')
@@ -97,7 +94,7 @@ class CustomerResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Action::make('approve')
                     ->label('Approve')
                     ->visible(fn (Customer $record) => $record->user_type == 3)
