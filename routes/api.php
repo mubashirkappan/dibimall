@@ -40,7 +40,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         });
         Route::controller(OfferController::class)->prefix('offer/')->group(function () {
             Route::get('main-list', 'MainIndex');
-            Route::post('/inside-shop-list', 'InsideShopIndex');
             Route::get('/random-list', 'RandomIndex');
             Route::post('/create', 'addImage');
             Route::get('delete/{id}', 'delete');
@@ -79,6 +78,7 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
 Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
+Route::post('offer/inside-shop-list', 'InsideShopIndex');
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
