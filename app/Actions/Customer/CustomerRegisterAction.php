@@ -46,6 +46,7 @@ class CustomerRegisterAction
             $validatedData['reffered_by'] = $refered_user->id;
         }
         $validatedData['referal_code'] = $referralCode;
+        $validatedData['reward_coin'] = 50;
         $customer = Customer::create($validatedData);
         if ($method === 'normal') {
             Auth::login($customer);

@@ -35,9 +35,10 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('shop_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('shop.name')
+                    ->label('Shop Name')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('active')

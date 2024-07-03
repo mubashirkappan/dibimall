@@ -33,8 +33,8 @@ class ConfirmOrderAction
         }
         $shop = Shop::find($shopId);
         $number = $shop->country_code.$shop->phone;
-        $customer = Customer::find(auth()->user()->id);
-        $customer->increment('reward_coin', 25);
+        // $customer = Customer::find(auth()->user()->id);
+        // $customer->increment('reward_coin', 25);
         $data['link'] = "https://wa.me/$number?text=I%20am%20ordering%20some%20items%20from%20your%20shop.%20Please%20check%20your%20orders";
         $data['cartItemCountNotPurchased'] = Cart::where('customer_id', auth()->user()->id)->where('purchased', 0)->count();
 

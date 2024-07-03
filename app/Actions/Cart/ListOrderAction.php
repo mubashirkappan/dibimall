@@ -47,10 +47,10 @@ class ListOrderAction
                 'dibi_price' => $cart->dibi_price,
                 'count' => $cart->count,
                 'shop_id' => $cart->shop_id,
+                'created_at' => $cart->created_at,
             ];
             $organizedData[$cart->shop->name]['total'] = $total_paid[$cart->shop->name];
             $organizedData[$cart->shop->name]['totalNormal'] = $total_paid_normal_by_shop[$cart->shop->name];
-            $organizedData[$cart->shop->name]['created_at'] = $cart->created_at;
             $total += $total_paid[$cart->shop->name];
             $totalNormal += $total_paid_in_normal[$cart->shop->name];
         }
