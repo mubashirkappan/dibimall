@@ -28,6 +28,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {
             Route::get('/list', 'ownerShopList');
+            //done      // new api for get single one with slug it will be like imagelink:slug
+            //done      //free delivery minimum amount
+            //done    //offer carouosla for shops limt the amount a column top image status collumn
+            //more place adding allow to shop owner and make diffrent table
+            //done    //item restrinct for item coutn in shops table
+            //done    //item agianst price under a messahe field
+            //done    //to stroe who is clicked to know trhe number of the owner of shop store for the user getting number from dibi
             Route::get('/show/{user_name}', 'showShopDetails');
             Route::get('/delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
@@ -78,7 +85,7 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
 Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
-Route::post('offer/inside-shop-list', 'InsideShopIndex');
+Route::post('offer/inside-shop-list', [OfferController::class, 'InsideShopIndex']);
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
