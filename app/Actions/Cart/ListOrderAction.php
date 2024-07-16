@@ -22,43 +22,44 @@ class ListOrderAction
         $total = 0;
         $totalNormal = 0;
         foreach ($cartItems as $cart) {
-            if (! isset($total_paid[$cart->shop->name])) {
-                $total_paid[$cart->shop->name] = 0;
-                $total_paid_in_normal[$cart->shop->name] = 0;
-                $total_paid_normal_by_shop[$cart->shop->name] = 0;
+            if (! isset($total_paid[$cart->shop_name])) {
+                $total_paid[$cart->shop_name] = 0;
+                $total_paid_in_normal[$cart->shop_name] = 0;
+                $total_paid_normal_by_shop[$cart->shop_name] = 0;
             }
 
-            if (! array_key_exists($cart->shop->name, $organizedData)) {
-                $organizedData[$cart->shop->name] = [
+            if (! array_key_exists($cart->shop_name, $organizedData)) {
+                $organizedData[$cart->shop_name] = [
                     'items' => [],
                     'total' => 0,
                     'totalNormal' => 0,
                     'date' => null,
                 ];
             }
-            $total_paid[$cart->shop->name] += $cart->dibi_price * $cart->count;
-            $total_paid_normal_by_shop[$cart->shop->name] += $cart->price * $cart->count;
-            $total_paid_in_normal[$cart->shop->name] += $cart->price * $cart->count;
-            $organizedData[$cart->shop->name]['items'][] = [
-                'item_id' => $cart->item_id,
-                'item_name' => $cart->item->name,
-                'image' => $cart->item->image_url,
+            $total_paid[$cart->shop_name] += $cart->dibi_price * $cart->count;
+            $total_paid_normal_by_shop[$cart->shop_name] += $cart->price * $cart->count;
+            $total_paid_in_normal[$cart->shop_name] += $cart->price * $cart->count;
+            $organizedData[$cart->shop_name]['items'][] = [
+                // 'item_id' => $cart->item_id,
+                'item_name' => $cart->item_name,
+                'image' => $cart->image_url,
                 'price' => $cart->price,
                 'dibi_price' => $cart->dibi_price,
                 'count' => $cart->count,
-                'shop_id' => $cart->shop_id,
+                // 'shop_id' => $cart->shop_id,
                 'created_at' => $cart->created_at,
             ];
-            $organizedData[$cart->shop->name]['total'] = $total_paid[$cart->shop->name];
-            $organizedData[$cart->shop->name]['totalNormal'] = $total_paid_normal_by_shop[$cart->shop->name];
-            $total += $total_paid[$cart->shop->name];
-            $totalNormal += $total_paid_in_normal[$cart->shop->name];
+            $organizedData[$cart->shop_name]['total'] = $total_paid[$cart->shop_name];
+            $organizedData[$cart->shop_name]['totalNormal'] = $total_paid_normal_by_shop[$cart->shop_name];
+            $total += $total_paid[$cart->shop_name];
+            $totalNormal += $total_paid_in_normal[$cart->shop_name];
         }
         $organizedData = collect($organizedData)->mapWithKeys(function ($value, $key) {
             return [str_replace(' ', '', lcfirst(ucwords($key))) => $value];
         })->toArray();
         $organizedData['overallTotal'] = $total;
         $organizedData['overallTotalNormal'] = $totalNormal;
+        // total error
 
         return [
             'success' => true,

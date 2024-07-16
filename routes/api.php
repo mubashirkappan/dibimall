@@ -81,6 +81,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::controller(OfferController::class)->prefix('offer/')->group(function () {
+    Route::get('main-list', 'MainIndex');
+    Route::get('/random-list', 'RandomIndex');
+});
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);

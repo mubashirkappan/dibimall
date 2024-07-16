@@ -60,6 +60,11 @@ class Cart extends Model
     //     // Define a custom method to access the shop through the item
     //     return $this->item->shop();
     // }
+    public function getImageUrlAttribute()
+    {
+        return asset('storage/'.$this->item_image_name);
+    }
 
-    protected $appends = ['encrypted_id'];
+
+    protected $appends = ['encrypted_id','image_url'];
 }

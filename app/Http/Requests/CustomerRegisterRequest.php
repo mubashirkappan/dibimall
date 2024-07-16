@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CustomerRegisterRequest extends FormRequest
 {
@@ -16,8 +17,12 @@ class CustomerRegisterRequest extends FormRequest
         return [
             'username' => 'max:255',
             'name' => 'required|max:255',
-            'phonenumber' => 'required|max:255|unique:customers',
-            'email' => 'nullable|email|max:255|unique:customers',
+            'phonenumber' => ['required','max:255',Rule::unique('customers')->where(function ($query) {
+                return $query->whereNull('deleted_at');
+            })],
+            'email' => ['nullable','email','max:255',Rule::unique('customers')->where(function ($query) {
+                return $query->whereNull('deleted_at');
+            })],
             'password' => 'required',
             'method' => 'required|string|in:google,apple,normal',
             'is_owner' => 'required|boolean',
