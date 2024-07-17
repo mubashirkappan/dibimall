@@ -38,6 +38,8 @@ class CustomerResource extends Resource
                 //     ->maxLength(255),
                 Forms\Components\TextInput::make('firstname')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('shop_count')
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('lastname')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phonenumber')
@@ -56,6 +58,8 @@ class CustomerResource extends Resource
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('shop_count')
+                        ->searchable(),
                 // Tables\Columns\TextColumn::make('firstname')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('lastname')

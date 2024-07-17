@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::table('carts', function (Blueprint $table) {
             $table->unsignedBigInteger('item_id')->nullable()->change();
             $table->unsignedBigInteger('shop_id')->nullable()->change();
-            $table->string('item_name')->after('item_id');
-            $table->string('item_image_name')->after('item_name');
-            $table->string('shop_name')->after('shop_id');
-            $table->string('message')->after('purchased');
+            $table->string('item_name')->after('item_id')->nullable();
+            $table->string('item_image_name')->after('item_name')->nullable();
+            $table->string('shop_name')->after('shop_id')->nullable();
+            $table->string('message')->after('purchased')->nullable();
         });
     }
 
