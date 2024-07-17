@@ -27,7 +27,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->unsignedBigInteger('item_id')->nullable(false)->change();
             $table->dropColumn('item_name');
             $table->dropColumn('item_image_name');
             $table->dropColumn('message');
