@@ -30,7 +30,7 @@ class ConfirmOrderAction
 
         foreach ($cartItems as $cartItem) {
             $item = Item::find($cartItem->item_id);
-            $cartItem->update(['item_id'=>null,'purchased' => 1, 'price' => $item->price,  'dibi_price' => $item->dibi_price,'item_name'=>$item->name,'item_image_name'=>$item->image_name,'shop_id'=>null,'shop_name'=>$item->shop->name]);
+            $cartItem->update(['item_id'=>null,'purchased' => 1, 'price' => $item->price,  'dibi_price' => $item->dibi_price,'item_name'=>$item->name,'item_image_name'=>$item->image_name,'shop_name'=>$item->shop->name]);
             OrderItem::create(['order_id' => $order->id, 'cart_id' => $cartItem->id]);
             $message .= "\n" .$cartItem->item_name . " - Quantity: " . $cartItem->count . ", Price: " . $cartItem->dibi_price;        
         }

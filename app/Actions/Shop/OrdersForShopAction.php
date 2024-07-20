@@ -32,9 +32,9 @@ class OrdersForShopAction
             $total_paid_normal_by_shop[$cart->shop->name] += $cart->price * $cart->count;
             $total_paid_in_normal[$cart->shop->name] += $cart->price * $cart->count;
             $organizedData[$cart->shop->name]['items'][] = [
-                'item_id' => $cart->item_id,
-                'item_name' => $cart->item->name,
-                'image' => $cart->item->image_url,
+                // 'item_id' => $cart->item_id,
+                'item_name' => $cart->item_name,
+                'image' => $cart->image_url,
                 'price' => $cart->price,
                 'dibi_price' => $cart->dibi_price,
                 'count' => $cart->count,
@@ -51,9 +51,9 @@ class OrdersForShopAction
         $organizedData = collect($organizedData)->mapWithKeys(function ($value, $key) {
             return [str_replace(' ', '', lcfirst(ucwords($key))) => $value];
         })->toArray();
+
         // $organizedData['overallTotal'] = $total;
         // $organizedData['overallTotalNormal'] = $totalNormal;
-
         return [
             'success' => true,
             'data' => $organizedData,
