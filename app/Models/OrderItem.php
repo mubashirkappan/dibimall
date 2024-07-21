@@ -14,6 +14,11 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
         // , 'id', 'item_id'
     }
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+        // , 'id', 'item_id'
+    }
 
     protected $guarded = [];
 }
