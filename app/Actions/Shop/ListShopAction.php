@@ -11,7 +11,7 @@ use App\Models\Shop;
 
 class ListShopAction
 {
-    public function execute($city, $shop)
+    public function execute($city, $shop,$from=null)
     {
 
         $placeId = Place::active()->when($city, function ($q) use ($city) {
@@ -21,6 +21,8 @@ class ListShopAction
             $q->whereIn('place_id', $placeId);
         })->when($shop, function ($q) use ($shop) {
             $q->where('slug', $shop);
+        })->when($from, function ($q) use ($from) {
+            $q->where('is_dibimall', $from);
         })->get();
         // Shop::with('Items')->get()->dd();
 

@@ -23,27 +23,39 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                // Forms\Components\TextInput::make('name')
+                //     ->required()
+                //     ->maxLength(255),
                 Forms\Components\TextInput::make('username')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //     ->required()
-                //     ->maxLength(255),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('firstname')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('shop_count')
+                    ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('referal_code')
+                    ->required()
+                    ->maxLength(255),
+                    Forms\Components\Select::make('user_type')
+                ->label('User Type')
+                ->options([
+                    1 => 'User',
+                    2 => 'Owner',
+                ])
+                ->required(),
                 Forms\Components\TextInput::make('lastname')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phonenumber')
                     ->tel()
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -154,6 +166,6 @@ class CustomerResource extends Resource
 
     public static function canCreate(): bool
     {
-        return false;
+        return true;
     }
 }

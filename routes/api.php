@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
+        Route::post('create-shop', [ShopController::class, 'create']);
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {
             Route::get('/list', 'ownerShopList');
             //done      // new api for get single one with slug it will be like imagelink:slug
@@ -69,7 +70,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('track-phone-click', [UserController::class, 'trackPhoneClick']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
     Route::get('refer', [ReferController::class, 'refer']);
-    Route::post('create-shop', [ShopController::class, 'create']);
     Route::post('check-shop-user-name', [ShopController::class, 'checkUserName']);
     Route::post('add-to-cart', [CartController::class, 'addToCart']);
     Route::get('get-cart', [CartController::class, 'getCart']);
