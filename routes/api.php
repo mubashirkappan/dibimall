@@ -93,6 +93,7 @@ Route::get('/shops', [ShopController::class, 'index']);
 Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
 Route::post('offer/inside-shop-list', [OfferController::class, 'InsideShopIndex']);
 Route::post('order', [TasOrderController::class, 'orderFromTas']);
+Route::get('list-usernames', [ShopController::class, 'userNames']);
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);

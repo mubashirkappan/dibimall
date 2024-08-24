@@ -12,6 +12,8 @@ use App\Actions\Shop\OwnerShopListAction;
 use App\Actions\Shop\UpdateShopAction;
 use App\Http\Requests\CreateShopRequest;
 use App\Http\Requests\UpdateShopRequest;
+use App\Models\Shop;
+use Illuminate\Http\Request;
 
 class ShopController extends BaseController
 {
@@ -101,5 +103,13 @@ class ShopController extends BaseController
         } else {
             return $this->sendError($response['message']);
         }
+    }
+    public function userNames(Request $request){
+        $request->validate([
+            'from'=>'required'
+        ]);
+        $shop = Shop::where('from',request('from'))->pluck('slug');
+        return response()->json(['message'=>'user name list','data'=>$shop]);
+
     }
 }
