@@ -36,7 +36,6 @@ class CreateShopRequest extends FormRequest
             'type_id' => 'required|string',
             'place_id' => 'required|string',
             'delivery' => 'required|bool',
-            'from'=>'required|string',
         ];
     }
 }

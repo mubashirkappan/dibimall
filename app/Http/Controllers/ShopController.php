@@ -21,9 +21,7 @@ class ShopController extends BaseController
     {
         $city = request('city') ? request('city') : null;
         $shop = request('shop') ? request('shop') : null;
-        if(request('from') == 'dibimall')
-            $from = 1;
-        $response = $action->execute($city, $shop,$from);
+        $response = $action->execute($city, $shop);
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {

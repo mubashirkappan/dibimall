@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('shops', function (Blueprint $table) {
             $table->string('currency');
-            $table->string('from');
+            $table->string('from')->default('dibimall');
         });
     }
 

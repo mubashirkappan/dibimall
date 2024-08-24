@@ -25,7 +25,6 @@ class CreateShopAction
                 throw new Exception('you have already added one shop if you add more please contact admin', 1);
             }
             $slug = $request->user_name;
-            $from = $request->from=='dibimall' ?1:0 ;
             $this->checkSlug($slug);
             $shop = Shop::create([
                 'name' => $request->name,
@@ -45,7 +44,6 @@ class CreateShopAction
                 'image_count' => 1,
                 'customer_id' => $userId,
                 'free_delivery_above' => $request->free_delivery_above,
-                'is_dibimall'=>$from
             ]);
             Customer::find($userId)->update(['user_type' => 2]);
             if (! $shop) {
