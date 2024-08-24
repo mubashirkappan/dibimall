@@ -11,13 +11,13 @@ use App\Models\Shop;
 
 class ListShopAction
 {
-    public function execute($city, $shop)
+    public function execute($city, $shop,$from=null)
     {
 
         $placeId = Place::active()->when($city, function ($q) use ($city) {
             $q->where('name', $city);
         })->pluck('id');
-        $shops = Shop::with('Items')->active()->when($placeId, function ($q) use ($placeId) {
+        $shops = Shop::where('from','dibimall')->with('Items')->active()->when($placeId, function ($q) use ($placeId) {
             $q->whereIn('place_id', $placeId);
         })->when($shop, function ($q) use ($shop) {
             $q->where('slug', $shop);

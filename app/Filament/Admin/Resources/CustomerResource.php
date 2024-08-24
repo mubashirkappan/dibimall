@@ -12,7 +12,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Forms\Components\TextInput;
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
@@ -27,24 +27,42 @@ class CustomerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('username')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('username')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //     ->required()
-                //     ->maxLength(255),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('firstname')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('shop_count')
+                TextInput::make('shop_count')
+                    ->required()
+                    ->maxLength(10)
+                    ->rule('regex:/^[0-9]{1,10}$/'),
+                Forms\Components\TextInput::make('referal_code')
+                    ->required()
                     ->maxLength(255),
+                    Forms\Components\Select::make('user_type')
+                ->label('User Type')
+                ->options([
+                    1 => 'User',
+                    2 => 'Owner',
+                ])
+                ->required(),
                 Forms\Components\TextInput::make('lastname')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phonenumber')
+                TextInput::make('phonenumber')
                     ->tel()
-                    ->maxLength(255),
+                    ->required()
+                    ->maxLength(13)
+                    ->minLength(6)
+                    ->rule('regex:/^[0-9]{10,15}$/'),
             ]);
     }
 
@@ -154,6 +172,6 @@ class CustomerResource extends Resource
 
     public static function canCreate(): bool
     {
-        return false;
+        return true;
     }
 }

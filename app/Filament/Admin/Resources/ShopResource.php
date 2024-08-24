@@ -9,7 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-
+use Filament\Forms\Components\Select;
 class ShopResource extends Resource
 {
     protected static ?string $model = Shop::class;
@@ -26,10 +26,20 @@ class ShopResource extends Resource
                 Forms\Components\BelongsToSelect::make('customer_id')
                     ->relationship('customer', 'name')
                     ->required(),
+                    Select::make('from')
+                ->label('Select Store')
+                ->options([
+                    'dibimall' => 'DIBIMALL',
+                    'thasweel' => 'THASWEEL',
+                ])
+                ->required(),
                 Forms\Components\BelongsToSelect::make('type_id')
                     ->relationship('type', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('address')
