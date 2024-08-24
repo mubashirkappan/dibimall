@@ -10,6 +10,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ReferController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TasOrderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
+        Route::get('order-list', [TasOrderController::class, 'orderList']);
         Route::post('create-shop', [ShopController::class, 'create']);
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {
             Route::get('/list', 'ownerShopList');
@@ -90,6 +92,7 @@ Route::post('/items', [ItemController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
 Route::get('/shop-image-list', [ShopController::class, 'shopImageAndSlug']);
 Route::post('offer/inside-shop-list', [OfferController::class, 'InsideShopIndex']);
+Route::post('order', [TasOrderController::class, 'orderFromTas']);
 
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('shops', function (Blueprint $table) {
-            $table->integer('is_dibimall')->default(1);
+            $table->string('currency');
+            $table->string('from');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('shops', function (Blueprint $table) {
-            $table->dropColumn('is_dibimall');
+            $table->dropColumn('currency');
+            $table->dropColumn('from');
         });
     }
 };
