@@ -32,7 +32,6 @@ class CustomerRegisterAction
                 $validatedData['password'] = Str::random(16);
                 break;
             case 'normal':
-                $validatedData['password'] = Hash::make($validatedData['password']);
                 break;
             default:
                 throw new InvalidArgumentException('Invalid registration method');

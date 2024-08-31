@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('shop_id')->constrained();
             $table->string('user_name');
-            $table->integer('user_phone_number');
+            $table->string('user_phone_number');
             $table->text('address');
             $table->integer('total_price');
             $table->boolean('is_completed')->default(false);

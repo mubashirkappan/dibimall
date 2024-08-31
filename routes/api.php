@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\ItemController;
@@ -98,3 +99,4 @@ Route::get('list-usernames', [ShopController::class, 'userNames']);
 Route::post('customer-register', [CustomerRegisterController::class, 'register']);
 Route::post('customer-login', [CustomerLoginController::class, 'login']);
 Route::get('places-list', [PlaceController::class, 'list']);
+Route::post('contact-us', [ContactController::class, 'contactUs']);

@@ -22,9 +22,9 @@ class OrderFromTasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phonenumber'=>'required|integer|digits_between:6,13',
+            'phonenumber'=>'required|string',
             'name'=>'required|string|max:255',
-            'address'=>'required|string|max:255',
+            'address'=>'nullable|string|max:255',
             'total_price'=>'required|integer',
             'shop_id'=>'required|exists:shops,id',
             'items'=>'required|array',
