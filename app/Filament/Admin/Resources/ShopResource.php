@@ -88,9 +88,10 @@ class ShopResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('type.name')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('from')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('place.name')
                     ->numeric()
                     ->sortable(),
