@@ -36,4 +36,11 @@ class TasOrderController extends Controller
         $tasOrder = TasOrder::where('shop_id',request('shop_id'))->with(['items'])->get();
         return response()->json(['message'=>'order list','data'=>$tasOrder]);
     }
+    public function statusChange(Request $request){
+        $request->validate([
+            'order_id'=>'required|exists:tas_orders,id'
+        ]);
+        TasOrder::where('id',request('order_id'))->update(['status'=>'deliverd']);
+        return response()->json(['message'=>'order status upated']);
+    }
 }

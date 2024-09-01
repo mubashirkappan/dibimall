@@ -26,19 +26,22 @@ class ShopResource extends Resource
                 Forms\Components\BelongsToSelect::make('customer_id')
                     ->relationship('customer', 'name')
                     ->required(),
-                    Select::make('from')
-                ->label('Select Store')
-                ->options([
-                    'dibimall' => 'DIBIMALL',
-                    'thasweel' => 'THASWEEL',
-                ])
-                ->required(),
+                Select::make('from')
+                    ->label('Select Store')
+                    ->options([
+                        'dibimall' => 'DIBIMALL',
+                        'thasweel' => 'THASWEEL',
+                    ])
+                    ->required(),
                 Forms\Components\BelongsToSelect::make('type_id')
                     ->relationship('type', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('currency')
+                    ->required()
+                    ->maxLength(5),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
@@ -88,6 +91,8 @@ class ShopResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('from')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('from')

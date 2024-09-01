@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
 
 class PlaceResource extends Resource
 {
@@ -20,6 +21,13 @@ class PlaceResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('from')
+                    ->label('Select Store')
+                    ->options([
+                        'dibimall' => 'DIBIMALL',
+                        'thasweel' => 'THASWEEL',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -41,6 +49,8 @@ class PlaceResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('from')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('district')

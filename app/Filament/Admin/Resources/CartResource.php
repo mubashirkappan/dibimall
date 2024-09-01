@@ -36,6 +36,8 @@ class CartResource extends Resource
             ->columns([
                 TextColumn::make('item_name')->sortable()->searchable(),
                 TextColumn::make('price')->sortable()->searchable(),
+                Tables\Columns\IconColumn::make('purchased')
+                    ->boolean(),
                 TextColumn::make('dibi_price')->sortable()->searchable(),
                 TextColumn::make('count')->sortable()->searchable(),
                 TextColumn::make('shop.name')->sortable()->searchable(),

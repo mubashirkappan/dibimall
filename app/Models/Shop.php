@@ -11,6 +11,10 @@ class Shop extends Model
 
     protected $guarded = [];
 
+    public function setCurrencyAttribute($value)
+    {
+        $this->attributes['currency'] = strtoupper($value);
+    }
     public function scopeActive($query)
     {
         return $query->where('active', 1);
@@ -43,7 +47,7 @@ class Shop extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset('storage/'.$this->logo_name);
+        return asset('storage/' . $this->logo_name);
     }
 
     public function customer()
