@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PlaceResource\Pages;
 use App\Models\Place;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -20,6 +21,13 @@ class PlaceResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('from')
+                    ->label('Select Store')
+                    ->options([
+                        'dibimall' => 'DIBIMALL',
+                        'thasweel' => 'THASWEEL',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -41,6 +49,8 @@ class PlaceResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('from')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('district')

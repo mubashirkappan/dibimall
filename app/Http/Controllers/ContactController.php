@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class ContactController extends BaseController
 {
-    public function contactUs(Request $request){
+    public function contactUs(Request $request)
+    {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -19,7 +20,7 @@ class ContactController extends BaseController
 
         return response()->json([
             'success' => 'Your message has been received. We will get back to you soon.',
-            'data' => $contact
+            'data' => $contact,
         ], 201);
     }
 }

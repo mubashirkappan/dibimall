@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'is.owner'], function () {
+        Route::post('deliverd', [TasOrderController::class, 'statusChange']);
         Route::get('order-list', [TasOrderController::class, 'orderList']);
         Route::post('create-shop', [ShopController::class, 'create']);
         Route::controller(ShopController::class)->prefix('shop/')->group(function () {

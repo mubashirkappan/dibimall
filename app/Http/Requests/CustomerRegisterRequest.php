@@ -17,10 +17,10 @@ class CustomerRegisterRequest extends FormRequest
         return [
             'username' => 'max:255',
             'name' => 'required|max:255',
-            'phonenumber' => ['required','max:255',Rule::unique('customers')->where(function ($query) {
+            'phonenumber' => ['required', 'max:255', Rule::unique('customers')->where(function ($query) {
                 return $query->whereNull('deleted_at');
             })],
-            'email' => ['nullable','email','max:255',Rule::unique('customers')->where(function ($query) {
+            'email' => ['nullable', 'email', 'max:255', Rule::unique('customers')->where(function ($query) {
                 return $query->whereNull('deleted_at');
             })],
             'password' => 'required',

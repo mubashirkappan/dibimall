@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\CustomerResource\Pages;
 use App\Models\Customer;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -12,7 +14,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
+
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
@@ -23,6 +25,13 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('from')
+                    ->label('Select Store')
+                    ->options([
+                        'dibimall' => 'DIBIMALL',
+                        'thasweel' => 'THASWEEL',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -48,13 +57,13 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('referal_code')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\Select::make('user_type')
-                ->label('User Type')
-                ->options([
-                    1 => 'User',
-                    2 => 'Owner',
-                ])
-                ->required(),
+                Forms\Components\Select::make('user_type')
+                    ->label('User Type')
+                    ->options([
+                        1 => 'User',
+                        2 => 'Owner',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('lastname')
                     ->maxLength(255),
                 TextInput::make('phonenumber')
@@ -70,6 +79,8 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('from')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('username')
@@ -77,7 +88,7 @@ class CustomerResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('shop_count')
-                        ->searchable(),
+                    ->searchable(),
                 // Tables\Columns\TextColumn::make('firstname')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('lastname')
