@@ -4,7 +4,6 @@ namespace App\Actions\Customer;
 
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 

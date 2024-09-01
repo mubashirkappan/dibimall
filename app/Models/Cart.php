@@ -55,6 +55,7 @@ class Cart extends Model
     {
         return $this->belongsTo(Shop::class);
     }
+
     // public function shop()
     // {
     //     // Define a custom method to access the shop through the item
@@ -65,6 +66,5 @@ class Cart extends Model
         return asset('storage/'.$this->item_image_name);
     }
 
-
-    protected $appends = ['encrypted_id','image_url'];
+    protected $appends = ['encrypted_id', 'image_url'];
 }

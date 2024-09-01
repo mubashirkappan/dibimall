@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class TasOrder extends Model
 {
     use HasFactory;
-    protected $guarded =[];
-    public function items(){
+
+    protected $guarded = [];
+
+    public function items()
+    {
         return $this->hasMany(TasOrderItem::class);
     }
 }

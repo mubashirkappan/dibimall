@@ -19,7 +19,7 @@ return new class extends Migration
         });
         Schema::table('tas_orders', function (Blueprint $table) {
             $table->dropColumn('is_completed');
-            $table->enum('status',['pending','deliverd'])->default('pending');
+            $table->enum('status', ['pending', 'deliverd'])->default('pending');
         });
     }
 

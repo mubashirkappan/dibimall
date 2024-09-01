@@ -22,7 +22,7 @@ class ShopController extends BaseController
         $city = request('city') ? request('city') : null;
         $shop = request('shop') ? request('shop') : null;
         $from = request('from') ? request('from') : null;
-        $response = $action->execute($city, $shop,$from);
+        $response = $action->execute($city, $shop, $from);
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
@@ -103,12 +103,15 @@ class ShopController extends BaseController
             return $this->sendError($response['message']);
         }
     }
-    public function userNames(Request $request){
+
+    public function userNames(Request $request)
+    {
         $request->validate([
-            'from'=>'required'
+            'from' => 'required',
         ]);
-        $shop = Shop::where('from',request('from'))->pluck('slug');
-        return response()->json(['message'=>'user name list','data'=>$shop]);
+        $shop = Shop::where('from', request('from'))->pluck('slug');
+
+        return response()->json(['message' => 'user name list', 'data' => $shop]);
 
     }
 }

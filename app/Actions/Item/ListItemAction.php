@@ -14,7 +14,7 @@ class ListItemAction
         })->when($request['keyword'], function ($q) use ($request) {
             $q->where('name', 'like', '%'.$request['keyword'].'%');
         })->where('shop_id', $request['shop_id'])
-        ->orderBy('category_id')->get();
+            ->orderBy('category_id')->get();
 
         $data = ItemResource::collection($items);
 

@@ -39,7 +39,7 @@ class CreateShopAction
                 'km' => $request->km,
                 'take_away' => $request->take_away,
                 'type_id' => $request->type_id,
-                'currency'=>'INR',
+                'currency' => 'INR',
                 'place_id' => $request->place_id,
                 'active' => 1,
                 'image_count' => 1,

@@ -5,11 +5,11 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PlaceResource\Pages;
 use App\Models\Place;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Select;
 
 class PlaceResource extends Resource
 {

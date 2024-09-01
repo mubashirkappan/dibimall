@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\CustomerResource\Pages;
 use App\Models\Customer;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -12,8 +14,6 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 
 class CustomerResource extends Resource
 {
@@ -130,7 +130,7 @@ class CustomerResource extends Resource
                 // Tables\Actions\EditAction::make(),
                 Action::make('approve')
                     ->label('Approve')
-                    ->visible(fn(Customer $record) => $record->user_type == 3)
+                    ->visible(fn (Customer $record) => $record->user_type == 3)
                     ->action(function (Customer $record) {
                         $record->update(['user_type' => 2]);
                     })
@@ -139,7 +139,7 @@ class CustomerResource extends Resource
                     ->icon('heroicon-o-arrow-trending-up'),
                 Action::make('decline')
                     ->label('Decline')
-                    ->visible(fn(Customer $record) => $record->user_type == 3)
+                    ->visible(fn (Customer $record) => $record->user_type == 3)
                     ->action(function (Customer $record) {
                         $record->update(['user_type' => 1]);
                     })
