@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     });
 
+    Route::post('reset-password', [UserController::class, 'resetPassword']);
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::post('track-phone-click', [UserController::class, 'trackPhoneClick']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);

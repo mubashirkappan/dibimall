@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Customer;
 use App\Models\TrackPhonenumberClickedUser;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends BaseController
 {
@@ -36,5 +38,25 @@ class UserController extends BaseController
         TrackPhonenumberClickedUser::create(['shop_id' => request('shop_id'), 'customer_id' => auth()->user()->id]);
 
         return $this->sendSuccess([], 'user can show the number');
+    }
+    public function resetPassword()
+    {
+        request()->validate([
+            'new_password' => 'required',
+            'old_password' => 'required',
+        ]);
+        $customer = Customer::find(auth()->user()->id);
+        if ($customer && (Hash::check(request('old_password'), $customer->password) || md5(request('old_password')) == $customer->password)) {
+            // Rehash the password with Bcrypt
+            $customer->password = request('new_password');
+            $customer->save();
+            return $this->sendSuccess([], 'password updated successfully');
+            // return response()->json(['success' => 'Password updated.']);
+        } else {
+            return $this->sendError('Old password is incorrect.');
+
+            // return response()->json(['error' => 'Old password is incorrect.'], 401);
+        }
+
     }
 }
