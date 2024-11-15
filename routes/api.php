@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/create', 'create');
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
+            Route::get('/status-change/{encrypted_id}', 'statusChange');
         });
         Route::controller(CartController::class)->group(function () {
             Route::post('complete-order', 'completeOrder');
@@ -70,6 +71,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     });
 
+    Route::post('reset-password', [UserController::class, 'resetPassword']);
     Route::get('get-user', [UserController::class, 'getUser']);
     Route::post('track-phone-click', [UserController::class, 'trackPhoneClick']);
     Route::get('update-to-owner', [UserController::class, 'updateToOwner']);
