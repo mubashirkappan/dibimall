@@ -18,6 +18,8 @@ class TasOrderController extends Controller
             'user_phone_number' => $request['phonenumber'],
             'address' => $request['address'],
             'total_price' => $request['total_price'],
+            'created_at' => now(auth()->user()->timezone ?? null),
+            'updated_at' => now(auth()->user()->timezone ?? null),
         ]);
         foreach ($request['items'] as $value) {
             TasOrderItem::create([
@@ -26,6 +28,8 @@ class TasOrderController extends Controller
                 'price_per_item' => $value['pricePerItem'],
                 'quantity' => $value['quantity'],
                 'totalPrice' => $value['totalPrice'],
+                'created_at' => now(auth()->user()->timezone ?? null),
+                'updated_at' => now(auth()->user()->timezone ?? null),
             ]);
         }
 
@@ -47,7 +51,7 @@ class TasOrderController extends Controller
         $request->validate([
             'order_id' => 'required|exists:tas_orders,id',
         ]);
-        TasOrder::where('id', request('order_id'))->update(['status' => 'deliverd']);
+        TasOrder::where('id', request('order_id'))->update(['status' => 'delivered']);
 
         return response()->json(['message' => 'order status upated']);
     }

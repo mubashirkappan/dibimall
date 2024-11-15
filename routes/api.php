@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/create', 'create');
             Route::get('delete/{encrypted_id}', 'delete');
             Route::post('/update', 'update');
+            Route::get('/status-change/{encrypted_id}', 'statusChange');
         });
         Route::controller(CartController::class)->group(function () {
             Route::post('complete-order', 'completeOrder');
