@@ -8,6 +8,7 @@ use App\Actions\Items\SaveItemAction;
 use App\Actions\Items\UpdateItemAction;
 use App\Http\Requests\CreateItemRequest;
 use App\Http\Resources\ItemResource;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -55,5 +56,12 @@ class ItemsController extends Controller
         } else {
             return response()->json(['message' => $response['message'], 'success' => $response['success']], 500);
         }
+    }
+    public function statusChange($encryptedId){
+        $item = Item::find(decrypt($encryptedId));
+        $item->update(['active'=>!$item->active]);
+        return response()->json([
+            'message'=>'status changed successfully'
+        ]);
     }
 }
