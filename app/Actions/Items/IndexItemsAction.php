@@ -9,7 +9,7 @@ class IndexItemsAction
     public function execute($shopId)
     {
         try {
-            $items = Item::active()->where('shop_id', $shopId)->get();
+            $items = Item::where('shop_id', $shopId)->get();
 
             return [
                 'data' => $items,
