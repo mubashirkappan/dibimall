@@ -51,7 +51,7 @@ class TasOrderController extends Controller
         $request->validate([
             'order_id' => 'required|exists:tas_orders,id',
         ]);
-        TasOrder::where('id', request('order_id'))->update(['status' => 'delivered']);
+        TasOrder::where('id', request('order_id'))->update(['status' => 'deliverd']);
 
         return response()->json(['message' => 'order status upated']);
     }
