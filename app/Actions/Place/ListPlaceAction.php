@@ -9,7 +9,7 @@ class ListPlaceAction
 {
     public function execute()
     {
-        $places = Place::where('from','dibimall')->active()->when(request('keyword'), function ($q) {
+        $places = Place::where('from','thasweel')->active()->when(request('keyword'), function ($q) {
             $q->where('name', 'like', '%'.request('keyword').'%');
         })->orderBy('name')->get();
 
