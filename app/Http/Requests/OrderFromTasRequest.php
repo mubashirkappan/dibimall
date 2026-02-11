@@ -27,6 +27,7 @@ class OrderFromTasRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'total_price' => 'required|integer',
             'shop_id' => 'required|exists:shops,id',
+            'delivery_time' => 'nullable|string|max:255',
             'items' => 'required|array',
             'items.*.name' => 'required|string|max:255',
             'items.*.pricePerItem' => 'required|integer',
