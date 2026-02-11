@@ -16,6 +16,7 @@ class TasOrderController extends Controller
             'shop_id' => $request['shop_id'],
             'user_name' => $request['name'],
             'user_phone_number' => $request['phonenumber'],
+            'delivery_time' => $request['delivery_time'],
             'address' => $request['address'],
             'total_price' => $request['total_price'],
             'created_at' => now(auth()->user()->timezone ?? null),
