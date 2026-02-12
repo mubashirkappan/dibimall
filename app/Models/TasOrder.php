@@ -15,4 +15,15 @@ class TasOrder extends Model
     {
         return $this->hasMany(TasOrderItem::class);
     }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+    protected static function booted()
+    {
+        static::deleting(function ($order) {
+            // This deletes all related items first
+            $order->items()->delete();
+        });
+    }
 }
