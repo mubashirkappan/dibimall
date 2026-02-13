@@ -19,36 +19,37 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
-
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
 class TasOrderResource extends Resource
 {
     protected static ?string $model = TasOrder::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Shop Orders';
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                // Forms\Components\Card::make()->schema([
-                //     TextInput::make('user_name')->required(),
-                //     TextInput::make('total_price')->numeric()->prefix('INR'),
-                // ])->columns(2),
+    // public static function form(Form $form): Form
+    // {
+    //     return $form
+    //         ->schema([
+    //             // Forms\Components\Card::make()->schema([
+    //             //     TextInput::make('user_name')->required(),
+    //             //     TextInput::make('total_price')->numeric()->prefix('INR'),
+    //             // ])->columns(2),
 
-                // // The Items Section
-                // Repeater::make('items') // Relation name in Order Model
-                //     ->relationship()
-                //     ->schema([
-                //         TextInput::make('name')->required(),
-                //         TextInput::make('quantity')->numeric()->required(),
-                //         TextInput::make('price_per_item')->numeric()->prefix('INR'),
-                //     ])
-                //     ->columns(3)
-                //     ->label('Ordered Items')
-    
+    //             // // The Items Section
+    //             // Repeater::make('items') // Relation name in Order Model
+    //             //     ->relationship()
+    //             //     ->schema([
+    //             //         TextInput::make('name')->required(),
+    //             //         TextInput::make('quantity')->numeric()->required(),
+    //             //         TextInput::make('price_per_item')->numeric()->prefix('INR'),
+    //             //     ])
+    //             //     ->columns(3)
+    //             //     ->label('Ordered Items')
 
-            ]);
-    }
+
+    //         ]);
+    // }
     public static function getPluralLabel(): string
     {
         return 'Shop orders'; // Main page header
@@ -69,10 +70,10 @@ class TasOrderResource extends Resource
 
                 Tables\Columns\TextColumn::make('total_price')->sortable()->money('INR')
                     ->tooltip('This includes taxes and delivery fees'),
-                Tables\Columns\TextColumn::make('delivery_time')
-                    ->sortable()
-                    ->dateTime('d M Y, h:i A') // e.g., 12 Feb 2026, 01:30 PM
-                    ->description(fn($record) => $record->delivery_time ? 'Scheduled' : 'Not set'),
+                // Tables\Columns\TextColumn::make('delivery_time')
+                //     ->sortable()
+                //     ->dateTime('d M Y, h:i A') // e.g., 12 Feb 2026, 01:30 PM
+                //     ->description(fn($record) => $record->delivery_time ? 'Scheduled' : 'Not set'),
                 BadgeColumn::make('status')
                     ->colors([
                         'danger' => 'pending',
@@ -81,13 +82,15 @@ class TasOrderResource extends Resource
                 // Tables\Columns\IconColumn::make('status')
                 //     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    // ->dateTime()
+                    ->dateTime('d M Y, h:i A') // e.g., 12 Feb 2026, 01:30 PM
+
+                    ->sortable(),
+                // ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('updated_at')
+                //     ->dateTime()
+                //     ->sortable()
+                //     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('shop_id')
@@ -95,23 +98,51 @@ class TasOrderResource extends Resource
                     ->relationship('shop', 'name') // Assumes Order has a 'shop' relationship
                     ->searchable() // Helpful if you have many shops
                     ->preload(),   // Loads the list when the page loads
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label('Order Date From'),
+                        DatePicker::make('created_until')
+                            ->label('Order Date Until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['created_from'] ?? null) {
+                            $indicators['created_from'] = 'Order from ' . \Carbon\Carbon::parse($data['created_from'])->toFormattedDateString();
+                        }
+                        if ($data['created_until'] ?? null) {
+                            $indicators['created_until'] = 'Order until ' . \Carbon\Carbon::parse($data['created_until'])->toFormattedDateString();
+                        }
+                        return $indicators;
+                    }),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('updateStatus')
-                    ->form([
-                        // Use Select here, NOT SelectColumn
-                        Select::make('status')
-                            ->options([
-                                'pending' => 'pending',
-                                'deliverd' => 'delivered',
-                            ]),
-                    ])
-                    ->action(function ($record, $data) {
-                        $record->update($data);
-                    }),
+                // Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\Action::make('updateStatus')
+                //     ->form([
+                //         // Use Select here, NOT SelectColumn
+                //         Select::make('status')
+                //             ->options([
+                //                 'pending' => 'pending',
+                //                 'deliverd' => 'delivered',
+                //             ]),
+                //     ])
+                //     ->action(function ($record, $data) {
+                //         $record->update($data);
+                //     }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -131,7 +162,7 @@ class TasOrderResource extends Resource
     {
         return [
             'index' => Pages\ListTasOrders::route('/'),
-            'create' => Pages\CreateTasOrder::route('/create'),
+            // 'create' => Pages\CreateTasOrder::route('/create'),
             'edit' => Pages\EditTasOrder::route('/{record}/edit'),
             'view' => Pages\ViewTasOrder::route('/{record}'),
 

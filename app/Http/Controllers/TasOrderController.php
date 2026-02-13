@@ -42,7 +42,7 @@ class TasOrderController extends Controller
         $request->validate([
             'shop_id' => 'required|exists:shops,id',
         ]);
-        $tasOrder = TasOrder::where('shop_id', request('shop_id'))->with(['items'])->get();
+        $tasOrder = TasOrder::where('shop_id', request('shop_id'))->latest()->with(['items'])->get();
 
         return response()->json(['message' => 'order list', 'data' => $tasOrder]);
     }
