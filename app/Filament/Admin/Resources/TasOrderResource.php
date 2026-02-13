@@ -92,6 +92,7 @@ class TasOrderResource extends Resource
                 //     ->sortable()
                 //     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('shop_id')
                     ->label('Filter by Shop')
