@@ -83,8 +83,9 @@ class TasOrderResource extends Resource
                 //     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     // ->dateTime()
+                    ->label('Ordered At')
                     ->dateTime('d M Y, h:i A') // e.g., 12 Feb 2026, 01:30 PM
-
+                    ->timezone(fn ($record) => $record->shop->timezone ?? 'UTC')
                     ->sortable(),
                 // ->toggleable(isToggledHiddenByDefault: true),
                 // Tables\Columns\TextColumn::make('updated_at')
