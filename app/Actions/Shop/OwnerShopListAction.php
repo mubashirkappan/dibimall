@@ -18,6 +18,7 @@ class OwnerShopListAction
                 $q->where('from', $from);
             })
             ->get();
+
         $data = ShopResource::collection($shops);
 
         return [
