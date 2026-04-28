@@ -21,6 +21,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\DatePicker;
+
 class TasOrderResource extends Resource
 {
     protected static ?string $model = TasOrder::class;
@@ -82,10 +83,23 @@ class TasOrderResource extends Resource
                 // Tables\Columns\IconColumn::make('status')
                 //     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                    // ->dateTime()
                     ->label('Ordered At')
                     ->dateTime('d M Y, h:i A') // e.g., 12 Feb 2026, 01:30 PM
-                    ->timezone(fn ($record) => $record->shop->timezone ?? 'UTC')
+                    ->timezone(function ($record) {
+                        // Map currency codes to PHP supported timezones
+                        $countryTimeZones = [
+                            'AED' => 'Asia/Dubai',
+                            'INR' => 'Asia/Kolkata',
+                            'SAR' => 'Asia/Riyadh',
+                            'QAR' => 'Asia/Qatar',
+                            'BHR' => 'Asia/Bahrain',
+                        ];
+
+                        // Access the currency from the related shop
+                        $currency = $record->shop->currency ?? 'UTC';
+
+                        return $countryTimeZones[$currency] ?? 'UTC';
+                    })
                     ->sortable(),
                 // ->toggleable(isToggledHiddenByDefault: true),
                 // Tables\Columns\TextColumn::make('updated_at')
