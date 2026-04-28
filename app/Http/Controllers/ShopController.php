@@ -73,7 +73,8 @@ class ShopController extends BaseController
     public function ownerShopList(OwnerShopListAction $action)
     {
         $shopSlug = request('shop') ? request('shop') : null;
-        $response = $action->execute($shopSlug);
+        $from = request('from') ? request('from') : null;
+        $response = $action->execute($shopSlug,$from);
         if ($response['success']) {
             return $this->sendSuccess($response['data'], $response['message']);
         } else {
