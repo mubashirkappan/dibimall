@@ -38,8 +38,6 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('username')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('username')
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
