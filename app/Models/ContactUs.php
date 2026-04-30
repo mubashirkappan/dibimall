@@ -9,7 +9,9 @@ class ContactUs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'message', 'phone'];
+    protected $fillable = ['name', 'email', 'message', 'phone', 'is_notified'];
 
-    protected $hidden = ['id', 'created_at', 'updated_at'];
+    protected $casts = [
+        'is_notified' => 'boolean',
+    ];
 }
