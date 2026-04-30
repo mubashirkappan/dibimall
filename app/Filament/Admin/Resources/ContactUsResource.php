@@ -36,8 +36,8 @@ class ContactUsResource extends Resource
                 TextColumn::make('message')->sortable()->searchable(),
                 TextColumn::make('phone')->sortable()->searchable(),
                 TextColumn::make('email')->sortable()->searchable(),
-                
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

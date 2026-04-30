@@ -26,9 +26,10 @@ class ShopResource extends Resource
                     ->required(),
                 Forms\Components\BelongsToSelect::make('customer_id')
                     ->relationship('customer', 'name')
+                    ->label('Owner')
                     ->required(),
                 Select::make('from')
-                    ->label('Select Store')
+                    ->label('From')
                     ->options([
                         'dibimall' => 'DIBIMALL',
                         'thasweel' => 'THASWEEL',
