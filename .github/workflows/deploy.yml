@@ -1,0 +1,33 @@
+name: Laravel Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Hostinger
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/username/public_html/api
+
+            git pull origin main
+
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            PHP_PATH=$(which php)
+
+            $PHP_PATH artisan migrate --force
+
+            $PHP_PATH artisan optimize:clear
+
+            $PHP_PATH artisan optimize

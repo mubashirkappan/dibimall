@@ -128,13 +128,13 @@ class CustomerLoginAction
     {
         $credentials = [
             'password' => $request['password'],
+            'username'=> $request['identifier']
         ];
-
-        if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $request['identifier'];
-        } else {
-            $credentials['phonenumber'] = $request['identifier'];
-        }
+        // if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
+        //     $credentials['email'] = $request['identifier'];
+        // } else {
+        //     $credentials['phonenumber'] = $request['identifier'];
+        // }
 
         if (! Auth::guard('customer')->attempt($credentials)) {
             throw new Exception('Invalid Credential');
