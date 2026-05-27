@@ -48,6 +48,8 @@ class CustomerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('firstname')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('lastname')
+                    ->maxLength(255),
                 TextInput::make('shop_count')
                     ->required()
                     ->maxLength(10)
@@ -62,8 +64,6 @@ class CustomerResource extends Resource
                         2 => 'Owner',
                     ])
                     ->required(),
-                Forms\Components\TextInput::make('lastname')
-                    ->maxLength(255),
                 TextInput::make('phonenumber')
                     ->tel()
                     ->required()
@@ -128,7 +128,7 @@ class CustomerResource extends Resource
                 // Tables\Actions\EditAction::make(),
                 Action::make('approve')
                     ->label('Approve')
-                    ->visible(fn (Customer $record) => $record->user_type == 3)
+                    ->visible(fn(Customer $record) => $record->user_type == 3)
                     ->action(function (Customer $record) {
                         $record->update(['user_type' => 2]);
                     })
@@ -137,7 +137,7 @@ class CustomerResource extends Resource
                     ->icon('heroicon-o-arrow-trending-up'),
                 Action::make('decline')
                     ->label('Decline')
-                    ->visible(fn (Customer $record) => $record->user_type == 3)
+                    ->visible(fn(Customer $record) => $record->user_type == 3)
                     ->action(function (Customer $record) {
                         $record->update(['user_type' => 1]);
                     })
