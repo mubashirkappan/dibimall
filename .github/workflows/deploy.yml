@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
   workflow_dispatch:
 jobs:
   deploy:
@@ -18,7 +23,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/username/public_html/api
+            cd /home/u302678294/domains/fooddly.com/public_html/api
 
             git pull origin main
 
