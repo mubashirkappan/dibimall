@@ -40,7 +40,6 @@ class CustomerLoginAction
             }
 
             return $this->successResponse($customer);
-
         } catch (Exception $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }
@@ -93,11 +92,12 @@ class CustomerLoginAction
     private function findCustomer($request, $method)
     {
         if ($method === 'normal') {
-            if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
-                return Customer::where('email', $request['identifier'])->first();
-            } else {
-                return Customer::where('phonenumber', $request['identifier'])->first();
-            }
+            return Customer::where('username', $request['identifier'])->first();
+            // if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
+            //     return Customer::where('email', $request['identifier'])->first();
+            // } else {
+            //     return Customer::where('phonenumber', $request['identifier'])->first();
+            // }
         } else {
             if (isset($request['email'])) {
                 return Customer::where('email', $request['email'])->first();
@@ -111,7 +111,7 @@ class CustomerLoginAction
 
     private function handleOAuthLogin($customer, $request, $provider)
     {
-        $accessTokenField = $provider.'_access_token';
+        $accessTokenField = $provider . '_access_token';
 
         if (! $customer->$accessTokenField || $request['password'] !== $customer->$accessTokenField) {
             throw new Exception('Invalid Credential');
@@ -128,7 +128,7 @@ class CustomerLoginAction
     {
         $credentials = [
             'password' => $request['password'],
-            'username'=> $request['identifier']
+            'username' => $request['identifier']
         ];
         // if (filter_var($request['identifier'], FILTER_VALIDATE_EMAIL)) {
         //     $credentials['email'] = $request['identifier'];
