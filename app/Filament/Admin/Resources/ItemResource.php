@@ -44,6 +44,7 @@ class ItemResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\FileUpload::make('image_name')
+                    ->required()
                     ->image(),
                 Forms\Components\Toggle::make('active')
                     ->required(),
