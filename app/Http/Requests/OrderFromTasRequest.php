@@ -25,14 +25,14 @@ class OrderFromTasRequest extends FormRequest
             'phonenumber' => 'required|string',
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
-            'total_price' => 'required|integer',
+            'total_price' => 'required|numeric',
             'shop_id' => 'required|exists:shops,id',
             'delivery_time' => 'nullable|string|max:255',
             'items' => 'required|array',
             'items.*.name' => 'required|string|max:255',
-            'items.*.pricePerItem' => 'required|integer',
+            'items.*.pricePerItem' => 'required|numeric',
             'items.*.quantity' => 'required|integer',
-            'items.*.totalPrice' => 'required|integer',
+            'items.*.totalPrice' => 'required|numeric',
         ];
     }
 }
