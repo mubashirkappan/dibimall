@@ -16,11 +16,18 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('cascade');
             $table->unsignedBigInteger('item_id');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('item_id')->nullable()->references('id')->on('items')->onDelete('restrict')->onUpdate('cascade');
             $table->integer('count');
-            $table->decimal('total_price');
+            $table->decimal('price', 12, 2)->nullable();
+            $table->decimal('dibi_price', 12, 2)->nullable();
+            $table->decimal('total_price', 12, 2)->nullable();
             $table->boolean('purchased')->default(false);
-
+            $table->unsignedBigInteger('shop_id');
+            $table->foreign('shop_id')->nullable()->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('item_name')->nullable();
+            $table->string('item_image_name')->nullable();
+            $table->string('shop_name')->nullable();
+            $table->string('message')->nullable();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
+    protected static ?int $navigationSort = 6;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,12 +24,26 @@ class ItemResource extends Resource
             ->schema([
                 // Select::make('shop_id')
                 // ->relationship('shop', 'name'),
-                Forms\Components\BelongsToSelect::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
                 Forms\Components\BelongsToSelect::make('shop_id')
                     ->relationship('shop', 'name')
-                    ->required(),
+                    ->required()
+                    ->live(),
+
+                Forms\Components\BelongsToSelect::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required()
+                    ->disabled(fn(Forms\Get $get) => ! $get('shop_id'))
+                    ->options(function (Forms\Get $get) {
+                        $shopId = $get('shop_id');
+
+                        if (! $shopId) {
+                            return [];
+                        }
+
+                        return \App\Models\Category::query()
+                            ->where('shop_id', $shopId)
+                            ->pluck('name', 'id');
+                    }),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

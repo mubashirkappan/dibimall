@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

@@ -29,6 +29,9 @@ class TasOrderController extends Controller
                 'price_per_item' => $value['pricePerItem'],
                 'quantity' => $value['quantity'],
                 'totalPrice' => $value['totalPrice'],
+                'item_note' => $value['item_note'],
+                'preparation_preference' => $value['preparation_preference'],
+                'unit' => $value['unit'],
                 'created_at' => now(auth()->user()->timezone ?? null),
                 'updated_at' => now(auth()->user()->timezone ?? null),
             ]);

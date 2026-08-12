@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->string('message')->after('dibi_price')->nullable();
+            $table->string('unit_type')->nullable()->after('price');
+            $table->string('unit_value')->nullable()->after('unit_type');
+            $table->string('unit')->nullable()->after('unit_value');
         });
     }
 
@@ -22,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->dropColumn('message');
+            $table->dropColumn(['unit_type', 'unit_value', 'unit']);
         });
     }
 };

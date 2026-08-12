@@ -33,6 +33,9 @@ class OrderFromTasRequest extends FormRequest
             'items.*.pricePerItem' => 'required|numeric',
             'items.*.quantity' => 'required|integer',
             'items.*.totalPrice' => 'required|numeric',
+            'items.*.item_note' => 'nullable|string|max:255',
+            'items.*.preparation_preference' => 'nullable|string|max:255',
+            'items.*.unit' => 'nullable|string|max:255',
         ];
     }
 }

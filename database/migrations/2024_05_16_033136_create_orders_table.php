@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('order_name')->unique();
             $table->boolean('is_accepted_by_owner');
+            $table->boolean('is_completed')->default(0);
             $table->timestamps();
         });
     }

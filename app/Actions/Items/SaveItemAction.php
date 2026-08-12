@@ -34,6 +34,9 @@ class SaveItemAction
                 'offer' => $request->offer ? $request->offer : 0,
                 'percentage' => $request->percentage,
                 'amount' => $request->amount,
+                'unit_type' => $request->unit_type,
+                'unit_value' => $request->unit_value,
+                'unit' => $request->unit,
             ]
             );
 

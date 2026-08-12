@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('logo_name');
-            $table->integer('category_count');
             $table->integer('image_count');
             $table->boolean('delivery')->default(false);
             $table->integer('km');
@@ -31,6 +30,13 @@ return new class extends Migration
             $table->unsignedBigInteger('place_id');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('place_id')->references('id')->on('places')->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedBigInteger('customer_id')->nullable()->comment('owner id in customer table');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('slug')->nullable();
+            $table->integer('item_count')->default('50');
+            $table->integer('free_delivery_above')->nullable();
+            $table->string('currency');
+            $table->string('from')->default('dibimall');
             $table->timestamps();
         });
     }

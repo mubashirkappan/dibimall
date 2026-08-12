@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('contact_us', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->text('message');
+            $table->boolean('is_notified')->default(false);
             $table->timestamps();
         });
     }

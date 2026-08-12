@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('price');
-            $table->decimal('dibi_price');
+            $table->decimal('price', 12, 2);
+            $table->decimal('dibi_price', 12, 2);
             $table->integer('count');
             $table->string('image_name');
             $table->unsignedBigInteger('category_id');
@@ -24,6 +24,10 @@ return new class extends Migration
             $table->boolean('offer')->default(false);
             $table->decimal('percentage')->nullable();
             $table->decimal('amount')->nullable();
+            $table->unsignedBigInteger('shop_id');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('message')->nullable();
+
             $table->timestamps();
         });
     }

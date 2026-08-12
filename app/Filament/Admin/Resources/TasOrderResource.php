@@ -25,6 +25,7 @@ use Filament\Forms\Components\DatePicker;
 class TasOrderResource extends Resource
 {
     protected static ?string $model = TasOrder::class;
+    protected static ?int $navigationSort = 7;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Shop Orders';

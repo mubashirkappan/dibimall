@@ -27,6 +27,10 @@ class CreateItemRequest extends FormRequest
             'percentage' => 'nullable|numeric',
             'amount' => 'nullable|numeric',
             'message' => 'nullable|string',
+            'unit_type'=>'nullable|string',
+            'unit_value'=>'nullable|numeric',
+            'unit'=>'nullable|string',
+            
         ];
     }
 }

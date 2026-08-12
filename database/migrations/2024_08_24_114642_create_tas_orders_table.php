@@ -17,17 +17,23 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('user_phone_number');
             $table->text('address');
-            $table->integer('total_price');
-            $table->boolean('is_completed')->default(false);
+            $table->decimal('total_price', 12, 2);
+
+            $table->enum('status', ['pending', 'deliverd'])->default('pending');
+            $table->string('delivery_time')->nullable();
+
             $table->timestamps();
         });
         Schema::create('tas_order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tas_order_id')->constrained();
             $table->string('name');
-            $table->integer('price_per_item');
             $table->integer('quantity');
-            $table->integer('totalPrice');
+            $table->decimal('price_per_item', 12, 2);
+            $table->decimal('totalPrice', 12, 2);
+            $table->string('unit')->nullable();
+            $table->string('preparation_preference')->nullable();
+            $table->text('item_note')->nullable();
             $table->timestamps();
         });
     }

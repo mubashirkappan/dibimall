@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -42,6 +43,12 @@ class CustomerResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
+                TextInput::make('phonenumber')
+                    ->tel()
+                    ->required()
+                    ->maxLength(13)
+                    ->minLength(6)
+                    ->rule('regex:/^[0-9]{10,15}$/'),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
@@ -54,9 +61,6 @@ class CustomerResource extends Resource
                     ->required()
                     ->maxLength(10)
                     ->rule('regex:/^[0-9]{1,10}$/'),
-                Forms\Components\TextInput::make('referal_code')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\Select::make('user_type')
                     ->label('User Type')
                     ->options([
@@ -64,12 +68,7 @@ class CustomerResource extends Resource
                         2 => 'Owner',
                     ])
                     ->required(),
-                TextInput::make('phonenumber')
-                    ->tel()
-                    ->required()
-                    ->maxLength(13)
-                    ->minLength(6)
-                    ->rule('regex:/^[0-9]{10,15}$/'),
+
             ]);
     }
 

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ContactUsResource extends Resource
 {
     protected static ?string $model = ContactUs::class;
+    protected static ?int $navigationSort = 9;
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
 

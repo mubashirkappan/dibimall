@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('district');
             $table->string('state');
             $table->string('country');
+            $table->string('from')->default('dibimall');
             $table->boolean('active')->default(false);
             $table->timestamps();
         });

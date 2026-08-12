@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class Customer extends Authenticatable
 {
@@ -18,6 +19,10 @@ class Customer extends Authenticatable
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);
+    }
+    public function setReferalCodeAttribute($referal_code)
+    {
+        $this->attributes['referal_code'] = Str::uuid()->toString();
     }
 
     public function getEncryptedIdAttribute()

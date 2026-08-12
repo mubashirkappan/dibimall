@@ -14,7 +14,7 @@ class CreateShopAction
         try {
 
             if ($request->hasFile('logo')) {
-                $fileName = time().'.'.$request->file('logo')->getClientOriginalExtension();
+                $fileName = time() . '.' . $request->file('logo')->getClientOriginalExtension();
                 Storage::disk('public')->put($fileName, file_get_contents($request->file('logo')), 'public');
                 $logoPath = $fileName;
             }
@@ -45,6 +45,7 @@ class CreateShopAction
                 'image_count' => 1,
                 'customer_id' => $userId,
                 'free_delivery_above' => $request->free_delivery_above,
+                'from' => $request->from ?? 'thasweel'
             ]);
             Customer::find($userId)->update(['user_type' => 2]);
             if (! $shop) {
