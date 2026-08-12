@@ -20,11 +20,15 @@ class Customer extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($password);
     }
-    public function setReferalCodeAttribute($referal_code)
-    {
-        $this->attributes['referal_code'] = Str::uuid()->toString();
-    }
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->referal_code)) {
+                $model->referal_code = Str::uuid()->toString();
+            }
+        });
+    }
     public function getEncryptedIdAttribute()
     {
         return encrypt($this->id);
