@@ -9,7 +9,7 @@ class ListItemAction
 {
     public function execute($request)
     {
-        $items = Item::active()->when($request['category_id'], function ($q) use ($request) {
+        $items = Item::where('count', '>', 0)->active()->when($request['category_id'], function ($q) use ($request) {
             $q->where('category_id', $request['category_id']);
         })->when($request['keyword'], function ($q) use ($request) {
             $q->where('name', 'like', '%'.$request['keyword'].'%');
