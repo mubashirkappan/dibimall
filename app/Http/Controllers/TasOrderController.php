@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderFromTasRequest;
+use App\Models\Item;
 use App\Models\TasOrder;
 use App\Models\TasOrderItem;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class TasOrderController extends Controller
                 'created_at' => now(auth()->user()->timezone ?? null),
                 'updated_at' => now(auth()->user()->timezone ?? null),
             ]);
+            Item::where('name', $value['name'])->where('shop_id', $request['shop_id'])->decrement('count', $value['quantity']);
         }
 
         return response()->json(['message' => 'Your order has been successfully placed! Thank you for shopping with us.']);
