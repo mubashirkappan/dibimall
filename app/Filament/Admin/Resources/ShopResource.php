@@ -33,7 +33,7 @@ class ShopResource extends Resource
                     ->label('From')
                     ->options([
                         'dibimall' => 'DIBIMALL',
-                        'thasweel' => 'THASWEEL',
+                        'thasweel' => 'FOODDLY',
                     ])
                     ->required(),
                 Forms\Components\BelongsToSelect::make('type_id')
@@ -70,9 +70,14 @@ class ShopResource extends Resource
                     ->image()
                     ->required(),
                 Forms\Components\Toggle::make('delivery')
-                    ->required(),
+                    ->nullable(),
+                Forms\Components\Toggle::make('courier_charge_extra')
+                    ->nullable(),
                 Forms\Components\TextInput::make('km')
-                    ->required()
+                    ->nullable()
+                    ->numeric(),
+                Forms\Components\TextInput::make('free_delivery_above')
+                    ->nullable()
                     ->numeric(),
                 Forms\Components\TextInput::make('image_count')
                     ->required()

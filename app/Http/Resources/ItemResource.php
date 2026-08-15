@@ -21,6 +21,7 @@ class ItemResource extends JsonResource
             'unit' => $this->unit,
             'unit_value' => $this->unit_value,
             'unit_type' => $this->unit_type,
+            'allow_note' => $this->allow_note,
         ];
     }
 }

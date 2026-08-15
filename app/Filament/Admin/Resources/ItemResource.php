@@ -63,6 +63,9 @@ class ItemResource extends Resource
                     ->image(),
                 Forms\Components\Toggle::make('active')
                     ->required(),
+                Forms\Components\Toggle::make('allow_note')
+                    ->required(),
+
             ]);
     }
 
@@ -82,6 +85,8 @@ class ItemResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('image_name'),
+                Tables\Columns\IconColumn::make('allow_note')
+                    ->boolean(),
                 Tables\Columns\IconColumn::make('active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')

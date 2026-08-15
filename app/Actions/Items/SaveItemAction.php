@@ -37,6 +37,7 @@ class SaveItemAction
                 'unit_type' => $request->unit_type,
                 'unit_value' => $request->unit_value,
                 'unit' => $request->unit,
+                'allow_note' => $request->allow_note ? $request->allow_note : 0,
             ]
             );
 

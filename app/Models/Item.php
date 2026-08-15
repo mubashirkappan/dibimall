@@ -38,8 +38,12 @@ class Item extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset('storage/'.$this->image_name);
+        return asset('storage/' . $this->image_name);
     }
 
     protected $appends = ['encrypted_id', 'image_url'];
+
+    protected $casts = [
+        'allow_note' => 'boolean',
+    ];
 }

@@ -14,7 +14,7 @@ use Filament\Tables\Table;
 class PlaceResource extends Resource
 {
     protected static ?string $model = Place::class;
-    
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -27,7 +27,7 @@ class PlaceResource extends Resource
                     ->label('Select Store')
                     ->options([
                         'dibimall' => 'DIBIMALL',
-                        'thasweel' => 'THASWEEL',
+                        'thasweel' => 'FOODDLY',
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('name')

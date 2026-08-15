@@ -28,7 +28,7 @@ class CreateShopRequest extends FormRequest
             'landmark' => 'required|string',
             'country_code' => 'required|',
             'phone' => 'required|integer',
-            'free_delivery_above' => 'required|integer',
+            'free_delivery_above' => 'nullable|integer',
             'email' => 'required|string',
             'logo' => 'required|file',
             'km' => 'nullable|integer',
@@ -37,6 +37,7 @@ class CreateShopRequest extends FormRequest
             'place_id' => 'required|string',
             'delivery' => 'required|bool',
             'from' => 'nullable|string',
+            'courier_charge_extra' => 'nullable|boolean'
         ];
     }
 }

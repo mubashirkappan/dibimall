@@ -48,7 +48,7 @@ class Shop extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset('storage/'.$this->logo_name);
+        return asset('storage/' . $this->logo_name);
     }
 
     public function customer()
@@ -56,6 +56,11 @@ class Shop extends Model
         return $this->belongsTo(Customer::class);
         // , 'id', 'item_id'
     }
+    protected $casts = [
+        'courier_charge_extra' => 'boolean',
+        'km' => 'float',
+        'free_delivery_above' => 'float',
+    ];
 
     protected $appends = ['encrypted_id', 'image_url'];
 }

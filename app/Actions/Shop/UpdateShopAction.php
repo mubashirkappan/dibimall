@@ -37,6 +37,7 @@ class UpdateShopAction
                 'type_id' => $request->type_id,
                 'place_id' => $request->place_id,
                 'free_delivery_above' => $request->free_delivery_above,
+                'courier_charge_extra' => $request->courier_charge_extra ?? false
             ]);
         }
         $data['message'] = 'successfully updated shop';

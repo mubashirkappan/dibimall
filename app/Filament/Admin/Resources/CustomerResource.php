@@ -30,7 +30,7 @@ class CustomerResource extends Resource
                     ->label('Select Store')
                     ->options([
                         'dibimall' => 'DIBIMALL',
-                        'thasweel' => 'THASWEEL',
+                        'thasweel' => 'FOODDLY',
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('name')

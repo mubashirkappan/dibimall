@@ -45,7 +45,8 @@ class CreateShopAction
                 'image_count' => 1,
                 'customer_id' => $userId,
                 'free_delivery_above' => $request->free_delivery_above,
-                'from' => $request->from ?? 'thasweel'
+                'from' => $request->from ?? 'thasweel',
+                'courier_charge_extra' => $request->courier_charge_extra ?? false
             ]);
             Customer::find($userId)->update(['user_type' => 2]);
             if (! $shop) {
