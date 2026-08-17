@@ -1,0 +1,788 @@
+{
+  "info": {
+    "name": "Dibimall / Fooddly API",
+    "description": "Laravel API behind the Nuxt storefront.\n\n## Conventions\n\n- Every route lives under `/api` (routes/api.php).\n- Responses are shaped `{ success, data, message }` via BaseController.\n- **Business failures return HTTP 404, not 4xx-specific codes** — Actions catch their own exceptions and `sendError()` defaults to 404. Always branch on `success`, never on the status code alone.\n- Validation failures (FormRequest) do return a normal 422.\n- Auth is a Sanctum bearer token belonging to a **Customer** (not a User — User exists only for the Filament admin panel).\n- Destructive/update routes take an **encrypted id** in the path, not the numeric id. Read it from the `encrypted_id` / `encrypt_id` field of a list response.\n- `from` is a tenant discriminator (`thasweel`, `dibimall`). Omitting it on shop listings returns every tenant's shops.\n\n## Getting started\n\n1. Set `baseUrl` (e.g. `http://127.0.0.1:8000/api`).\n2. Run **Auth > Customer Login** — it captures `token` into the collection variables automatically.\n3. Owner folders additionally require the logged-in customer to have `user_type == 2`. Anything less is denied with a **302 redirect**, not a 403, because the `is.owner` middleware calls `redirect()->back()`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "tenant", "value": "thasweel" },
+    { "key": "shop_id", "value": "1" },
+    { "key": "shop_slug", "value": "" },
+    { "key": "category_id", "value": "1" },
+    { "key": "item_id", "value": "1" },
+    { "key": "order_id", "value": "1" },
+    { "key": "offer_id", "value": "1" },
+    { "key": "encrypted_shop_id", "value": "" },
+    { "key": "encrypted_item_id", "value": "" },
+    { "key": "encrypted_category_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Customer Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Test Buyer\",\n  \"username\": \"testbuyer\",\n  \"email\": \"buyer@example.com\",\n  \"phonenumber\": \"9876543210\",\n  \"password\": \"password\",\n  \"method\": \"normal\",\n  \"is_owner\": false,\n  \"reffered_by\": null\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/customer-register", "host": ["{{baseUrl}}"], "path": ["customer-register"] },
+            "description": "`is_owner: false` creates user_type 1 (buyer). `is_owner: true` creates user_type **3 (pending)** — never 2. Only an admin can grant owner status, via Approve on the Filament CustomerResource.\n\n`method` must be one of google | apple | normal. For google/apple the `password` field carries the provider access token.\n\n`phonenumber` and `email` are unique among non-soft-deleted customers. `reffered_by` must match an existing customer's `referal_code`."
+          },
+          "response": []
+        },
+        {
+          "name": "Customer Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.success && body.data && body.data.token) {",
+                  "    pm.collectionVariables.set('token', body.data.token);",
+                  "    console.log('Captured token. is_owner =', body.data.is_owner);",
+                  "} else {",
+                  "    console.warn('Login failed:', body.message);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"identifier\": \"testbuyer\",\n  \"phonenumber\": \"9876543210\",\n  \"password\": \"password\",\n  \"method\": \"normal\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/customer-login", "host": ["{{baseUrl}}"], "path": ["customer-login"] },
+            "description": "For `method: normal`, `identifier` is matched against the **username column only** — despite the generic name, email and phone lookups are commented out in CustomerLoginAction.\n\nThe validation rules still require one of email/phonenumber/identifier to be present, so send `phonenumber` alongside `identifier` to satisfy `required_without_all`.\n\nReturns `data.token` (Sanctum), `data.is_owner` (1 when user_type == 2), and `data.total_items` (unpurchased cart rows). The test script stores the token automatically.\n\nA wrong password returns **404** with `success: false`."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Authenticated Customer",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/get-user", "host": ["{{baseUrl}}"], "path": ["get-user"] },
+            "description": "Returns the UserResource: id, name, email, username, phonenumber, whatsapp_number, `is_owner` (derived from user_type), `rewards` (reward_coin), `shop_count` (the cap on how many shops this owner may create)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Raw Sanctum User",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/user", "host": ["{{baseUrl}}"], "path": ["user"] },
+            "description": "Laravel's stock `/user` closure. Returns the raw Customer model rather than a Resource — prefer `get-user`."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"old_password\": \"password\",\n  \"new_password\": \"new-password\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reset-password", "host": ["{{baseUrl}}"], "path": ["reset-password"] },
+            "description": "Accepts either a bcrypt-hashed or a legacy **md5** old password, so pre-migration accounts can still rotate. The new password is bcrypt-hashed by the Customer model's password mutator."
+          },
+          "response": []
+        },
+        {
+          "name": "Request Owner Upgrade",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/update-to-owner", "host": ["{{baseUrl}}"], "path": ["update-to-owner"] },
+            "description": "Moves user_type **1 -> 3 (pending) only**. Returns `success: false` for any other starting type. There is no API route that grants user_type 2 — an admin must approve the request in the Filament CustomerResource."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Referral Code",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/refer", "host": ["{{baseUrl}}"], "path": ["refer"] },
+            "description": "Returns the customer's `referal_code`, auto-generated as a UUID on create unless supplied."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public / Storefront",
+      "item": [
+        {
+          "name": "List Shops",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/shops?from={{tenant}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["shops"],
+              "query": [
+                { "key": "from", "value": "{{tenant}}", "description": "Tenant discriminator. Omit and you get every tenant's shops." },
+                { "key": "shop", "value": "{{shop_slug}}", "description": "Shop slug — resolves a single storefront.", "disabled": true },
+                { "key": "city", "value": "Kochi", "description": "Matches places.name; the place must be active.", "disabled": true }
+              ]
+            },
+            "description": "The storefront's entry point: `?shop=<slug>&from=thasweel` returns a one-element array for that shop, embedding its `categorys` and items.\n\nOnly `active` shops attached to an **active place** are returned. If a caller is authenticated, their own shops are excluded from the results.\n\nEach shop carries `encrypt_id` (encrypted primary key) — that is what the delete/update routes expect."
+          },
+          "response": []
+        },
+        {
+          "name": "List Items for a Shop",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}},\n  \"category_id\": null,\n  \"keyword\": null\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/items", "host": ["{{baseUrl}}"], "path": ["items"] },
+            "description": "Public storefront item list (ItemController + App\\Actions\\Item\\ — the read-only path; owner CRUD is the near-identically named ItemsController + App\\Actions\\Items\\).\n\nReturns only items that are `active` **and** have `count > 0`, so an item can vanish from the storefront through stock exhaustion alone.\n\n`keyword` is a `LIKE %…%` match on name. Results are ordered by category_id.\n\nField naming: `db_price` is the price actually charged (the `dibi_price` column); `price` is the higher struck-through MRP. Stock is `available_count`, and `allow_note` gates the per-item note input in the UI."
+          },
+          "response": []
+        },
+        {
+          "name": "List Categories",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/categories?shop_id={{shop_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [{ "key": "shop_id", "value": "{{shop_id}}" }]
+            },
+            "description": "`shop_id` is required. The owner-side `POST /categories/list` hits the same controller method."
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order (storefront checkout)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}},\n  \"name\": \"Test Buyer\",\n  \"phonenumber\": \"9876543210\",\n  \"address\": \"12 Market Road\",\n  \"delivery_time\": \"2026-08-20 18:00\",\n  \"total_price\": 200,\n  \"items\": [\n    {\n      \"name\": \"Chicken Biriyani\",\n      \"pricePerItem\": 100,\n      \"quantity\": 2,\n      \"totalPrice\": 200,\n      \"unit\": \"1 plate\",\n      \"preparation_preference\": \"separate\",\n      \"item_note\": \"less spicy\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/order", "host": ["{{baseUrl}}"], "path": ["order"] },
+            "description": "**Deliberately unauthenticated.** The storefront keeps the cart entirely client-side and posts the whole thing here at checkout, then deep-links the buyer to the shop owner's WhatsApp.\n\nWrites one `tas_orders` row (status `pending`) plus one `tas_order_items` row per line.\n\n**Stock is decremented by matching `name` + `shop_id`, not item id.** Consequences: two items sharing a name inside one shop are both decremented by a single order, and renaming an item between add-to-cart and checkout silently decrements nothing.\n\n`preparation_preference` is `separate` | `single_combined` (the UI only offers the choice for weight-based units). Note the camelCase `pricePerItem` / `totalPrice` keys — they mirror the frontend cart getter, unlike the snake_case columns they land in.\n\nReturns a bare `{ message }`, not the standard envelope."
+          },
+          "response": []
+        },
+        {
+          "name": "Shop Logos and Slugs",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/shop-image-list", "host": ["{{baseUrl}}"], "path": ["shop-image-list"] },
+            "description": "Lightweight listing of shop logo + slug pairs, for link/carousel rendering without pulling full shop payloads."
+          },
+          "response": []
+        },
+        {
+          "name": "List Shop Usernames",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/list-usernames?from={{tenant}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["list-usernames"],
+              "query": [{ "key": "from", "value": "{{tenant}}" }]
+            },
+            "description": "Returns the `slug` of every shop in the tenant. `from` is required. Used to enumerate valid storefront URLs."
+          },
+          "response": []
+        },
+        {
+          "name": "List Places",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/places-list", "host": ["{{baseUrl}}"], "path": ["places-list"] },
+            "description": "Active places only — these populate the city filter and the place selector in shop registration. A shop attached to an inactive place disappears from every shop listing."
+          },
+          "response": []
+        },
+        {
+          "name": "Contact Us",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Test Buyer\",\n  \"phone\": \"9876543210\",\n  \"message\": \"Do you deliver to my area?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/contact-us", "host": ["{{baseUrl}}"], "path": ["contact-us"] },
+            "description": "Returns **201** with `{ success: <string message>, data }` — note `success` is a human-readable string here, not the boolean the rest of the API uses."
+          },
+          "response": []
+        },
+        {
+          "name": "Track Phone Number Click",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/track-phone-click", "host": ["{{baseUrl}}"], "path": ["track-phone-click"] },
+            "description": "Authenticated. Logs that this customer revealed the shop's phone number (track_phonenumber_clicked_users) — the analytics behind 'who asked for a shop's contact'."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Offers / Banners",
+      "item": [
+        {
+          "name": "Platform Offers",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/offer/main-list", "host": ["{{baseUrl}}"], "path": ["offer", "main-list"] },
+            "description": "Banners with `is_admin_added = 1` — the platform-level promo carousel. Registered both publicly and inside the owner group; the public one is what the storefront hits."
+          },
+          "response": []
+        },
+        {
+          "name": "Random Offers",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/offer/random-list", "host": ["{{baseUrl}}"], "path": ["offer", "random-list"] },
+            "description": "One banner per shop (lowest id), shuffled, capped at 10. Note this runs a query per shop inside a map — it is not a single aggregate query."
+          },
+          "response": []
+        },
+        {
+          "name": "Offers Inside a Shop",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/offer/inside-shop-list", "host": ["{{baseUrl}}"], "path": ["offer", "inside-shop-list"] },
+            "description": "The banner carousel shown on a single storefront page."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Offer Banner (owner)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "shop_id", "value": "{{shop_id}}", "type": "text" },
+                { "key": "image", "type": "file", "src": [] }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/offer/create", "host": ["{{baseUrl}}"], "path": ["offer", "create"] },
+            "description": "Multipart. Stored on the `public` disk under a `time().ext` filename — two uploads in the same second collide and overwrite. Requires `php artisan storage:link` for the file to be reachable."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Offer Banner (owner)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/offer/delete/{{offer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["offer", "delete", "{{offer_id}}"]
+            },
+            "description": "Takes the **raw numeric id**, unlike the shop/item/category delete routes which expect an encrypted id. Deletes the stored file as well as the row."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Owner — Shops",
+      "item": [
+        {
+          "name": "Check Shop Username Availability",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"user_name\": \"my-shop\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/check-shop-user-name", "host": ["{{baseUrl}}"], "path": ["check-shop-user-name"] },
+            "description": "Authenticated but **not** owner-gated. `user_name` becomes the shop `slug`, i.e. the public storefront URL segment. Returns `success: false` when taken."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Shop",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "My Shop", "type": "text" },
+                { "key": "user_name", "value": "my-shop", "type": "text", "description": "Becomes the slug / storefront URL" },
+                { "key": "address", "value": "12 Market Road", "type": "text" },
+                { "key": "landmark", "value": "Near the bus stand", "type": "text" },
+                { "key": "country_code", "value": "91", "type": "text" },
+                { "key": "phone", "value": "9876543210", "type": "text" },
+                { "key": "email", "value": "shop@example.com", "type": "text" },
+                { "key": "logo", "type": "file", "src": [], "description": "Required" },
+                { "key": "type_id", "value": "1", "type": "text" },
+                { "key": "place_id", "value": "1", "type": "text" },
+                { "key": "delivery", "value": "1", "type": "text" },
+                { "key": "take_away", "value": "1", "type": "text" },
+                { "key": "km", "value": "5", "type": "text" },
+                { "key": "free_delivery_above", "value": "500", "type": "text" },
+                { "key": "courier_charge_extra", "value": "0", "type": "text" },
+                { "key": "from", "value": "{{tenant}}", "type": "text", "description": "Defaults to 'thasweel' when omitted" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/create-shop", "host": ["{{baseUrl}}"], "path": ["create-shop"] },
+            "description": "Multipart (the logo is required). Owner-gated, so the caller must already be user_type 2 — the `user_type => 2` write inside CreateShopAction is therefore a redundant re-write, never a promotion path.\n\nCapped by the customer's `shop_count`; exceeding it fails with 'you have already added one shop…'. `currency` is hardcoded to INR and `active`/`image_count` to 1."
+          },
+          "response": []
+        },
+        {
+          "name": "List My Shops",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/shop/list?from={{tenant}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["shop", "list"],
+              "query": [
+                { "key": "from", "value": "{{tenant}}" },
+                { "key": "shop", "value": "{{shop_slug}}", "disabled": true }
+              ]
+            },
+            "description": "The owner console's entry point — the shops belonging to the authenticated owner. Read `encrypt_id` from here for the update/delete routes."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Shop",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "encrypted_id", "value": "{{encrypted_shop_id}}", "type": "text" },
+                { "key": "name", "value": "My Shop", "type": "text" },
+                { "key": "user_name", "value": "my-shop", "type": "text" },
+                { "key": "address", "value": "12 Market Road", "type": "text" },
+                { "key": "landmark", "value": "Near the bus stand", "type": "text" },
+                { "key": "country_code", "value": "91", "type": "text" },
+                { "key": "phone", "value": "9876543210", "type": "text" },
+                { "key": "email", "value": "shop@example.com", "type": "text" },
+                { "key": "logo", "type": "file", "src": [], "description": "Optional on update" },
+                { "key": "type_id", "value": "1", "type": "text" },
+                { "key": "place_id", "value": "1", "type": "text" },
+                { "key": "delivery", "value": "1", "type": "text" },
+                { "key": "take_away", "value": "1", "type": "text" },
+                { "key": "km", "value": "5", "type": "text" },
+                { "key": "free_delivery_above", "value": "500", "type": "text" },
+                { "key": "courier_charge_extra", "value": "0", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/shop/update", "host": ["{{baseUrl}}"], "path": ["shop", "update"] },
+            "description": "POST (not PUT/PATCH) so the multipart logo upload works. `logo` is nullable here, unlike on create. Note `take_away` validates as `string` on update but `bool` on create."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Shop",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/shop/delete/{{encrypted_shop_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["shop", "delete", "{{encrypted_shop_id}}"]
+            },
+            "description": "A destructive operation exposed over **GET** with an encrypted id in the path."
+          },
+          "response": []
+        },
+        {
+          "name": "Show Shop Details — BROKEN",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/shop/show/{{shop_slug}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["shop", "show", "{{shop_slug}}"]
+            },
+            "description": "**This route is dead.** It is registered against `ShopController@showShopDetails`, but no such method exists on the controller, so it raises a 500. Kept here for completeness — use `GET /shops?shop=<slug>` instead."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Owner — Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categories/list", "host": ["{{baseUrl}}"], "path": ["categories", "list"] },
+            "description": "Same controller method as the public `GET /categories`, reached over POST inside the owner group."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}},\n  \"name\": \"Beverages\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categories/create", "host": ["{{baseUrl}}"], "path": ["categories", "create"] },
+            "description": "Returns an empty `data` on success — re-list to get the new row and its `encrypted_id`."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"encrypted_id\": \"{{encrypted_category_id}}\",\n  \"shop_id\": {{shop_id}},\n  \"name\": \"Cold Drinks\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/categories/update", "host": ["{{baseUrl}}"], "path": ["categories", "update"] },
+            "description": "The encrypted id travels in the **body** here, unlike the delete route which takes it in the path."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/categories/delete/{{encrypted_category_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "delete", "{{encrypted_category_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Owner — Items",
+      "item": [
+        {
+          "name": "List Items (owner view)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/items/list", "host": ["{{baseUrl}}"], "path": ["items", "list"] },
+            "description": "Owner-side listing (ItemsController). Unlike the public `POST /items`, this is the management view — the owner still needs to see inactive and out-of-stock items."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Item",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Chicken Biriyani", "type": "text" },
+                { "key": "price", "value": "150", "type": "text", "description": "Struck-through MRP" },
+                { "key": "dibi_price", "value": "120", "type": "text", "description": "Price actually charged (returned as db_price)" },
+                { "key": "count", "value": "20", "type": "text", "description": "Stock; 0 hides the item from the storefront" },
+                { "key": "category_id", "value": "{{category_id}}", "type": "text" },
+                { "key": "shop_id", "value": "{{shop_id}}", "type": "text" },
+                { "key": "image", "type": "file", "src": [] },
+                { "key": "active", "value": "1", "type": "text" },
+                { "key": "offer", "value": "0", "type": "text" },
+                { "key": "percentage", "value": "", "type": "text" },
+                { "key": "amount", "value": "", "type": "text" },
+                { "key": "message", "value": "", "type": "text" },
+                { "key": "unit", "value": "1 plate", "type": "text", "description": "Free-text label shown on the card" },
+                { "key": "unit_type", "value": "plate", "type": "text" },
+                { "key": "unit_value", "value": "1", "type": "text" },
+                { "key": "allow_note", "value": "1", "type": "text", "description": "Enables the per-item note field at checkout" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/items/create", "host": ["{{baseUrl}}"], "path": ["items", "create"] },
+            "description": "Multipart. Capped by the shop's `item_count`; exceeding it fails with 'your limit is exceeded…'.\n\nUnlike most endpoints, ItemsController returns **500** on failure rather than the 404 the BaseController pattern produces.\n\nA `unit` containing kg/g/lb/oz makes the storefront offer the separate-vs-combined fulfilment choice for quantities above 1."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Item",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "id", "value": "{{item_id}}", "type": "text", "description": "Raw numeric id — this route does NOT use the encrypted id" },
+                { "key": "name", "value": "Chicken Biriyani", "type": "text" },
+                { "key": "price", "value": "150", "type": "text" },
+                { "key": "dibi_price", "value": "120", "type": "text" },
+                { "key": "count", "value": "20", "type": "text" },
+                { "key": "category_id", "value": "{{category_id}}", "type": "text" },
+                { "key": "shop_id", "value": "{{shop_id}}", "type": "text" },
+                { "key": "image", "type": "file", "src": [], "description": "Optional" },
+                { "key": "unit", "value": "1 plate", "type": "text" },
+                { "key": "allow_note", "value": "1", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/items/update", "host": ["{{baseUrl}}"], "path": ["items", "update"] },
+            "description": "Shares CreateItemRequest, so every create field is required again on update. The target is `id` in the body — the plain numeric id, inconsistent with the encrypted ids used elsewhere.\n\nRenaming an item here breaks stock decrementing for carts already holding the old name, because checkout matches items by name."
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Item Active",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/items/status-change/{{encrypted_item_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["items", "status-change", "{{encrypted_item_id}}"]
+            },
+            "description": "Flips `active`. Takes the encrypted id."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/items/delete/{{encrypted_item_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["items", "delete", "{{encrypted_item_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Owner — Orders",
+      "item": [
+        {
+          "name": "List Storefront Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/order-list?shop_id={{shop_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["order-list"],
+              "query": [{ "key": "shop_id", "value": "{{shop_id}}" }]
+            },
+            "description": "TasOrders for one shop, newest first, with their items eager-loaded. This is what the owner console's order screen renders.\n\n`shop_id` must exist, but note the route does **not** verify the shop belongs to the authenticated owner."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Order Delivered",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"order_id\": {{order_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/deliverd", "host": ["{{baseUrl}}"], "path": ["deliverd"] },
+            "description": "Sets status to `deliverd`. Both the route path and the enum value carry that spelling in the database — do not 'fix' it without a migration."
+          },
+          "response": []
+        },
+        {
+          "name": "List Orders for Shop (server cart)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/get-orders", "host": ["{{baseUrl}}"], "path": ["get-orders"] },
+            "description": "The older Cart/Order lineage, not TasOrder. Scoped to the authenticated owner."
+          },
+          "response": []
+        },
+        {
+          "name": "Accept Order (server cart)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"order_id\": {{order_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/accept-order", "host": ["{{baseUrl}}"], "path": ["accept-order"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Order (server cart)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"order_id\": {{order_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/complete-order", "host": ["{{baseUrl}}"], "path": ["complete-order"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Server-side Cart (legacy marketplace)",
+      "description": "The older authenticated cart, distinct from the storefront's client-side cart. Still wired up and used by the marketplace pages (cart, order, customer-orders).",
+      "item": [
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"item_id\": {{item_id}},\n  \"shop_id\": {{shop_id}},\n  \"count\": 2\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/add-to-cart", "host": ["{{baseUrl}}"], "path": ["add-to-cart"] },
+            "description": "Line total is computed server-side as `dibi_price * count` — the client's price is ignored.\n\nIf a *purchased* row already exists for this (customer, item, shop) a new row is inserted; otherwise the open row is updated in place. Returns the count of unpurchased cart rows."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/get-cart", "host": ["{{baseUrl}}"], "path": ["get-cart"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"item_id\": {{item_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/delete-from-cart", "host": ["{{baseUrl}}"], "path": ["delete-from-cart"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"shop_id\": {{shop_id}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/confirm-order", "host": ["{{baseUrl}}"], "path": ["confirm-order"] },
+            "description": "Converts the open cart rows for one shop into an Order + OrderItems and flags the cart rows `purchased`."
+          },
+          "response": []
+        },
+        {
+          "name": "List Confirmed Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/confirm-orders-list", "host": ["{{baseUrl}}"], "path": ["confirm-orders-list"] },
+            "description": "The buyer's own order history."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

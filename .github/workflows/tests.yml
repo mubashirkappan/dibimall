@@ -1,0 +1,67 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# A new push to the same PR cancels the run still in flight for it.
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # composer.json declares php ^8.1, but nette/schema (pulled in via
+        # Filament) caps at < 8.4, so a clean `composer install` fails on 8.4.
+        # Raise this only once that constraint lifts.
+        php: ['8.2', '8.3']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          # sqlite3/pdo_sqlite back the in-memory test database in phpunit.xml.
+          extensions: ctype, curl, dom, fileinfo, intl, mbstring, openssl, pdo_sqlite, sqlite3, tokenizer, xml, zip
+          coverage: none
+
+      - name: Resolve Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-php${{ matrix.php }}-
+
+      # Must precede `composer install`: the post-autoload-dump hook runs
+      # `artisan package:discover` and `artisan filament:upgrade`, which want an
+      # .env to boot against.
+      - name: Create .env
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      # Tests exercise encrypted_id attributes, which need a real APP_KEY.
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run tests
+        run: php artisan test
