@@ -102,9 +102,9 @@ class ShopResource extends Resource
                 Tables\Columns\TextColumn::make('from')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('from')
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn (Shop $record): string => 'https://fooddly.com/' . $record->slug)
+                    ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('place.name')
                     ->numeric()
                     ->sortable(),
